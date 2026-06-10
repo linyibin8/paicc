@@ -205,12 +205,11 @@ class QAService {
             )
         }
     }
-}
 
-// MARK: - 扩展
+    // MARK: - 发送查询
 
-extension QAService {
-    static var shared: VoiceService {
-        return AppState.shared.speechService
+    func sendQuery(_ text: String) {
+        handleVoiceInput(text)
+        checkAndProcessInput()
     }
 }

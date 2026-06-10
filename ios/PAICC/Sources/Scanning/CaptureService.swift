@@ -109,8 +109,8 @@ extension CaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
     }
 
     private func detectHandPresence(in pixelBuffer: CVPixelBuffer) {
-        let request = VNDetectHumanHandposeRequest { [weak self] request, error in
-            guard let observations = request.results as? [VNHumanHandposeObservation],
+        let request = VNDetectHumanHandPoseRequest { [weak self] request, error in
+            guard let observations = request.results as? [VNHumanHandPoseObservation],
                   !observations.isEmpty else {
                 self?.delegate?.captureService(self!, didDetectHandPresence: false)
                 return

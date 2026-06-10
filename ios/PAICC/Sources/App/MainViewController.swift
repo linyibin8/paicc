@@ -82,8 +82,9 @@ class MainViewController: UIViewController {
     }
 
     private func setupCamera() {
-        cameraPreviewView.addSubview(AppState.shared.cameraService.previewLayer)
-        AppState.shared.cameraService.previewLayer.frame = cameraPreviewView.bounds
+        let previewLayer = AppState.shared.cameraService.previewLayer
+        previewLayer.frame = cameraPreviewView.bounds
+        cameraPreviewView.layer.addSublayer(previewLayer)
 
         // 观察状态变化
         AppState.shared.$scanState.sink { [weak self] state in

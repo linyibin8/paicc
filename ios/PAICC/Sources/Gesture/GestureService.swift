@@ -164,7 +164,8 @@ class GestureService {
         guard let wrist = fingers[.wrist] else { return false }
 
         var count = 0
-        for tipKey in [.indexTip, .middleTip, .ringTip, .littleTip] {
+        let tipKeys: [VNHumanHandPoseObservation.JointName] = [.indexTip, .middleTip, .ringTip, .littleTip]
+        for tipKey in tipKeys {
             if let tip = fingers[tipKey] {
                 let dist = distance(tip.location, wrist.location)
                 if dist > 0.3 { count += 1 }

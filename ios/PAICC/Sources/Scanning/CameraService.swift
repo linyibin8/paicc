@@ -9,10 +9,13 @@ class CameraService: NSObject {
     private let videoOutput = AVCaptureVideoDataOutput()
     private let sessionQueue = DispatchQueue(label: "camera.session.queue")
 
+    private var _previewLayer: AVCaptureVideoPreviewLayer?
     var previewLayer: AVCaptureVideoPreviewLayer {
-        let layer = AVCaptureVideoPreviewLayer(session: captureSession)
-        layer.videoGravity = .resizeAspectFill
-        return layer
+        if _previewLayer == nil {
+            _previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+            _previewLayer?.videoGravity = .resizeAspectFill
+        }
+        return _previewLayer!
     }
 
     private var currentFrame: CVPixelBuffer?

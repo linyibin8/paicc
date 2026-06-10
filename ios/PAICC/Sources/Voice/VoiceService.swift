@@ -4,6 +4,9 @@ import AVFoundation
 /// 语音服务 - 语音识别和 TTS
 class VoiceService: NSObject {
 
+    // MARK: - 单例
+    static let shared = VoiceService()
+
     // MARK: - 属性
     private let speechRecognizer: SFSpeechRecognizer?
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
