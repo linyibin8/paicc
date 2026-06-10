@@ -1,54 +1,50 @@
-name: PAICodex
+name: PAICC
 options:
   bundleIdPrefix: com.evowit
   deploymentTarget:
     iOS: "16.0"
-  xcodeVersion: "15.0"
+  xcodeVersion: "16.0"
+  developmentLanguage: zh-Hans
   createIntermediateGroups: true
-  groupSortPosition: top
+  generateEmptyDirectories: true
 
 settings:
   base:
-    PRODUCT_BUNDLE_IDENTIFIER: com.evowit.paicc
     MARKETING_VERSION: "1.0.0"
     CURRENT_PROJECT_VERSION: "1"
-    DEVELOPMENT_TEAM: N3G45G5H74
-    CODE_SIGN_STYLE: Automatic
-    SWIFT_VERSION: "5.9"
-    INFOPLIST_FILE: PAICodex/Resources/Info.plist
-    ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    SWIFT_VERSION: "5.0"
+    DEVELOPMENT_TEAM: "N3G45G5H74"
+    CODE_SIGN_STYLE: Manual
+    CODE_SIGNING_REQUIRED: "NO"
+    CODE_SIGNING_ALLOWED: "NO"
 
 targets:
-  PAICodex:
+  PAICC:
     type: application
     platform: iOS
     sources:
-      - path: PAICodex/Sources
-        type: group
-      - path: PAICodex/Resources
-        type: group
+      - path: PAICC/Sources
+      - path: PAICC/Resources
     settings:
       base:
-        INFOPLIST_FILE: PAICodex/Resources/Info.plist
         PRODUCT_BUNDLE_IDENTIFIER: com.evowit.paicc
-        CODE_SIGN_IDENTITY: "Apple Distribution"
-        CODE_SIGN_STYLE: Manual
-        PROVISIONING_PROFILE_SPECIFIER: "Development"
-    info:
-      path: PAICodex/Resources/Info.plist
+        INFOPLIST_FILE: PAICC/Sources/App/Info.plist
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ENABLE_PREVIEWS: YES
+        LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SWIFT_EMIT_LOC_STRINGS: YES
+        GENERATE_INFOPLIST_FILE: NO
+    entitlements:
+      path: PAICC/Sources/App/PAICC.entitlements
       properties:
-        CFBundleDisplayName: 拍题助手
-        CFBundleShortVersionString: "1.0.0"
-        CFBundleVersion: "1"
-        UILaunchStoryboardName: LaunchScreen
-        UISupportedInterfaceOrientations:
-          - UIInterfaceOrientationPortrait
-        NSCameraUsageDescription: 需要使用相机来拍摄题目和学习材料
-        NSMicrophoneUsageDescription: 需要使用麦克风进行语音指令输入
-        NSSpeechRecognitionUsageDescription: 需要使用语音识别来理解您的指令
-        UIApplicationSceneManifest:
-          UIApplicationSupportsMultipleScenes: false
-          UISceneConfigurations:
-            UIWindowSceneSessionRoleApplication:
-              - UISceneConfigurationName: Default Configuration
-                UISceneDelegateClassName: $(PRODUCT_MODULE_NAME).SceneDelegate
+        com.apple.security.app-sandbox: true
+        com.apple.security.network.client: true
+
+packages:
+  SnapKit:
+    url: https://github.com/SnapKit/SnapKit.git
+    from: "5.7.0"
+  Alamofire:
+    url: https://github.com/Alamofire/Alamofire.git
+    from: "5.9.0"

@@ -1,172 +1,232 @@
 """
-PAI-CC 会话管理 API
+PAI-CC 会话/学习回合 API
 """
-from fastapi import APIRouter, HTTPException
-from typing import Optional, List
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
 from pydantic import BaseModel
+from typing import Optional, List
 from datetime import datetime
 import uuid
+
+from app.models.database import get_db
+from app.models.models import Session as SessionModel
 
 router = APIRouter()
 
 
+# ============ 数据模型 ============
+
 class SessionCreate(BaseModel):
-    """创建会话"""
-    student_id: Optional[str] = None
+    student_id: str
     student_goal: Optional[str] = None
     assistant_focus: Optional[str] = None
-    report_style: str = "detailed"
+    report_style: str = "normal"
+
+
+class SessionUpdate(BaseModel):
+    status: Optional[str] = None
+    student_goal: Optional[str] = None
+    assistant_focus: Optional[str] = None
+    report_style: Optional[str] = None
 
 
 class SessionResponse(BaseModel):
-    """会话响应"""
     session_id: str
+    student_id: str
     status: str
+    student_goal: Optional[str]
+    assistant_focus: Optional[str]
+    report_style: str
+    camera_active_time: int
+    student_active_time: int
+    empty_capture_time: int
+    capture_count: int
+    mistake_count: int
+    learning_item_count: int
+    report: Optional[dict]
+    started_at: Optional[datetime]
+    ended_at: Optional[datetime]
     created_at: datetime
-    student_id: Optional[str] = None
-    total_captures: int = 0
 
 
-class SessionReport(BaseModel):
-    """会话报告"""
-    session_id: str
-    generated_at: datetime
-    timeline: dict
-    summary: dict
-    learning_content: dict
-    knowledge_points: List[str] = []
-    mistake_summary: dict
-    recommendations: dict
+# ============ API ============
 
+@router.post("/", response_model=SessionResponse)
+async def create_session(data: SessionCreate, db: Session = Depends(get_db)):
+    """创建新的学习会话"""
+    session_id = f"sess_{uuid.uuid4().hex[:12]}"
 
-# 内存存储（实际生产环境应使用数据库）
-_sessions = {}
-
-
-@router.post("", response_model=SessionResponse)
-async def create_session(data: SessionCreate):
-    """创建学习回合"""
-    session_id = str(uuid.uuid4())
-
-    session = {
-        "session_id": session_id,
-        "status": "created",
-        "created_at": datetime.now(),
-        "student_id": data.student_id,
-        "student_goal": data.student_goal,
-        "assistant_focus": data.assistant_focus,
-        "report_style": data.report_style,
-        "total_captures": 0
-    }
-
-    _sessions[session_id] = session
-
-    return SessionResponse(
+    session = SessionModel(
         session_id=session_id,
-        status="created",
-        created_at=session["created_at"],
         student_id=data.student_id,
-        total_captures=0
+        student_goal=data.student_goal,
+        assistant_focus=data.assistant_focus,
+        report_style=data.report_style,
+        status="created",
+        started_at=datetime.utcnow()
     )
 
+    db.add(session)
+    db.commit()
+    db.refresh(session)
 
-@router.get("/{session_id}")
-async def get_session(session_id: str):
+    return SessionResponse(**{
+        "session_id": session.session_id,
+        "student_id": session.student_id,
+        "status": session.status,
+        "student_goal": session.student_goal,
+        "assistant_focus": session.assistant_focus,
+        "report_style": session.report_style,
+        "camera_active_time": session.camera_active_time,
+        "student_active_time": session.student_active_time,
+        "empty_capture_time": session.empty_capture_time,
+        "capture_count": session.capture_count,
+        "mistake_count": session.mistake_count,
+        "learning_item_count": session.learning_item_count,
+        "report": session.report,
+        "started_at": session.started_at,
+        "ended_at": session.ended_at,
+        "created_at": session.created_at
+    })
+
+
+@router.get("/{session_id}", response_model=SessionResponse)
+async def get_session(session_id: str, db: Session = Depends(get_db)):
     """获取会话详情"""
-    if session_id not in _sessions:
+    session = db.query(SessionModel).filter(
+        SessionModel.session_id == session_id
+    ).first()
+
+    if not session:
         raise HTTPException(status_code=404, detail="Session not found")
 
-    return _sessions[session_id]
+    return SessionResponse(**{
+        "session_id": session.session_id,
+        "student_id": session.student_id,
+        "status": session.status,
+        "student_goal": session.student_goal,
+        "assistant_focus": session.assistant_focus,
+        "report_style": session.report_style,
+        "camera_active_time": session.camera_active_time,
+        "student_active_time": session.student_active_time,
+        "empty_capture_time": session.empty_capture_time,
+        "capture_count": session.capture_count,
+        "mistake_count": session.mistake_count,
+        "learning_item_count": session.learning_item_count,
+        "report": session.report,
+        "started_at": session.started_at,
+        "ended_at": session.ended_at,
+        "created_at": session.created_at
+    })
 
 
-@router.put("/{session_id}/status")
-async def update_session_status(session_id: str, status: str):
-    """更新会话状态"""
-    if session_id not in _sessions:
+@router.patch("/{session_id}", response_model=SessionResponse)
+async def update_session(
+    session_id: str,
+    data: SessionUpdate,
+    db: Session = Depends(get_db)
+):
+    """更新会话"""
+    session = db.query(SessionModel).filter(
+        SessionModel.session_id == session_id
+    ).first()
+
+    if not session:
         raise HTTPException(status_code=404, detail="Session not found")
 
-    valid_statuses = ["created", "active", "processing", "completed", "failed"]
-    if status not in valid_statuses:
-        raise HTTPException(status_code=400, detail=f"Invalid status. Must be one of {valid_statuses}")
+    if data.status:
+        session.status = data.status
+        if data.status == "active":
+            session.started_at = datetime.utcnow()
+        elif data.status in ("completed", "failed"):
+            session.ended_at = datetime.utcnow()
 
-    _sessions[session_id]["status"] = status
-    return {"status": "ok", "session_id": session_id, "new_status": status}
+    if data.student_goal:
+        session.student_goal = data.student_goal
+    if data.assistant_focus:
+        session.assistant_focus = data.assistant_focus
+    if data.report_style:
+        session.report_style = data.report_style
+
+    db.commit()
+    db.refresh(session)
+
+    return SessionResponse(**{
+        "session_id": session.session_id,
+        "student_id": session.student_id,
+        "status": session.status,
+        "student_goal": session.student_goal,
+        "assistant_focus": session.assistant_focus,
+        "report_style": session.report_style,
+        "camera_active_time": session.camera_active_time,
+        "student_active_time": session.student_active_time,
+        "empty_capture_time": session.empty_capture_time,
+        "capture_count": session.capture_count,
+        "mistake_count": session.mistake_count,
+        "learning_item_count": session.learning_item_count,
+        "report": session.report,
+        "started_at": session.started_at,
+        "ended_at": session.ended_at,
+        "created_at": session.created_at
+    })
 
 
-@router.get("/{session_id}/report", response_model=SessionReport)
-async def get_session_report(session_id: str):
-    """获取会话报告"""
-    if session_id not in _sessions:
+@router.post("/{session_id}/end")
+async def end_session(
+    session_id: str,
+    report: dict = None,
+    db: Session = Depends(get_db)
+):
+    """结束会话并生成报告"""
+    session = db.query(SessionModel).filter(
+        SessionModel.session_id == session_id
+    ).first()
+
+    if not session:
         raise HTTPException(status_code=404, detail="Session not found")
 
-    # 生成报告（实际应调用 AI 服务）
-    return SessionReport(
-        session_id=session_id,
-        generated_at=datetime.now(),
-        timeline={
-            "total_duration": 1800,
-            "observation_time": 1700,
-            "student_active_time": 1500,
-            "empty_capture_time": 200
-        },
-        summary={
-            "total_captures": 25,
-            "key_frames": 15,
-            "learning_materials": 10,
-            "estimated_questions": 5
-        },
-        learning_content={
-            "questions": [],
-            "answers": [],
-            "student_work": [],
-            "corrections": []
-        },
-        knowledge_points=["一元二次方程", "函数图像"],
-        mistake_summary={
-            "candidates": [],
-            "confirmed": 0,
-            "ignored": 0
-        },
-        recommendations={
-            "review_needed": [],
-            "practice_needed": [],
-            "mastered": []
-        }
-    )
+    session.status = "processing"
+    db.commit()
+
+    # TODO: 触发报告生成任务
+    if report:
+        session.report = report
+
+    session.status = "completed"
+    session.ended_at = datetime.utcnow()
+    db.commit()
+
+    return {"status": "completed", "session_id": session_id}
 
 
-@router.get("")
+@router.get("/")
 async def list_sessions(
     student_id: Optional[str] = None,
     status: Optional[str] = None,
+    skip: int = 0,
     limit: int = 20,
-    offset: int = 0
+    db: Session = Depends(get_db)
 ):
-    """列出所有会话"""
-    results = list(_sessions.values())
+    """列出会话"""
+    query = db.query(SessionModel)
 
     if student_id:
-        results = [s for s in results if s.get("student_id") == student_id]
-
+        query = query.filter(SessionModel.student_id == student_id)
     if status:
-        results = [s for s in results if s.get("status") == status]
+        query = query.filter(SessionModel.status == status)
 
-    total = len(results)
-    results = results[offset:offset + limit]
+    sessions = query.order_by(SessionModel.created_at.desc()).offset(skip).limit(limit).all()
 
     return {
-        "sessions": results,
-        "total": total,
-        "limit": limit,
-        "offset": offset
+        "sessions": [
+            {
+                "session_id": s.session_id,
+                "status": s.status,
+                "capture_count": s.capture_count,
+                "mistake_count": s.mistake_count,
+                "created_at": s.created_at.isoformat() if s.created_at else None
+            }
+            for s in sessions
+        ],
+        "total": query.count()
     }
-
-
-@router.delete("/{session_id}")
-async def delete_session(session_id: str):
-    """删除会话"""
-    if session_id in _sessions:
-        del _sessions[session_id]
-        return {"status": "deleted", "session_id": session_id}
-
-    raise HTTPException(status_code=404, detail="Session not found")

@@ -6,8 +6,8 @@ from typing import Optional
 
 
 class Settings(BaseSettings):
-    # 数据库
-    database_url: str = "postgresql://ydz:ydz123@localhost:5432/paicc"
+    # 数据库 (使用 SQLite 进行本地测试)
+    database_url: str = "sqlite:///./paicc.db"
 
     # Redis
     redis_url: str = "redis://localhost:6379"

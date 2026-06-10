@@ -1,101 +1,107 @@
 """
 PAI-CC TTS 语音合成 API
 """
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, APIRouter, UploadFile, File, Form, Depends, HTTPException
+from fastapi.responses import FileResponse
+from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from typing import Optional
-import httpx
 import os
 import uuid
+from datetime import datetime
+
+from app.models.database import get_db
+from app.core.config import settings
+from app.services.tts_service import tts_service
 
 router = APIRouter()
 
 
+# ============ 数据模型 ============
+
 class TTSRequest(BaseModel):
-    """TTS 请求"""
     text: str
-    voice: str = "af_heart"  # 音色选择
-    speed: float = 1.0  # 语速 0.5-2.0
-    language: str = "zh-CN"
+    voice: str = "af_heart"  # af_heart, af_bella, mf_man
 
 
 class TTSResponse(BaseModel):
-    """TTS 响应"""
     audio_url: str
-    duration: float
-    text_length: int
+    duration: Optional[float] = None
 
+
+# ============ API ============
 
 @router.post("/synthesize", response_model=TTSResponse)
-async def synthesize_speech(request: TTSRequest):
+async def synthesize_speech(
+    text: str = Form(...),
+    voice: str = Form("af_heart")
+):
     """
-    文字转语音
+    合成语音
 
-    使用 Kokoro TTS 服务
+    Args:
+        text: 要合成的文本
+        voice: 声音选择
+            - af_heart: 温暖女声
+            - af_bella: 甜美女声
+            - mf_man: 沉稳男声
     """
-    from app.core.config import settings
-
-    # 限制文本长度
-    if len(request.text) > 1000:
+    if len(text) > 1000:
         raise HTTPException(status_code=400, detail="Text too long (max 1000 chars)")
 
     try:
-        async with httpx.AsyncClient(timeout=30.0) as client:
-            response = await client.post(
-                f"{settings.tts_base_url}/v1/tts",
-                json={
-                    "text": request.text,
-                    "model": "kokoro",
-                    "voice": request.voice,
-                    "speed": request.speed
-                }
-            )
+        filename = f"tts_{datetime.now().timestamp()}.wav"
+        audio_path = await tts_service.synthesize(text, voice=voice, output_filename=filename)
 
-            if response.status_code == 200:
-                # 保存音频文件
-                audio_id = str(uuid.uuid4())
-                audio_dir = os.path.join(settings.upload_dir, "tts")
-                os.makedirs(audio_dir, exist_ok=True)
+        return TTSResponse(
+            audio_url=f"/uploads/audio/{filename}",
+            duration=None  # TODO: 计算实际时长
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"TTS failed: {str(e)}")
 
-                audio_path = os.path.join(audio_dir, f"{audio_id}.wav")
-                with open(audio_path, "wb") as f:
-                    f.write(response.content)
 
-                # 估算时长（按中文约 5 字/秒）
-                duration = len(request.text) / 5 / request.speed
+@router.post("/synthesize-stream")
+async def synthesize_speech_stream(
+    text: str = Form(...),
+    voice: str = Form("af_heart")
+):
+    """
+    流式合成语音（直接返回音频数据）
+    """
+    if len(text) > 1000:
+        raise HTTPException(status_code=400, detail="Text too long (max 1000 chars)")
 
-                return TTSResponse(
-                    audio_url=f"/api/v1/tts/audio/{audio_id}.wav",
-                    duration=duration,
-                    text_length=len(request.text)
-                )
-            else:
-                raise HTTPException(status_code=500, detail="TTS service error")
+    try:
+        audio_data = await tts_service.synthesize_stream(text, voice=voice)
 
-    except httpx.RequestError:
-        raise HTTPException(status_code=503, detail="TTS service unavailable")
+        return StreamingResponse(
+            iter([audio_data]),
+            media_type="audio/wav",
+            headers={
+                "Content-Disposition": f"attachment; filename=tts_{datetime.now().timestamp()}.wav"
+            }
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"TTS failed: {str(e)}")
 
 
 @router.get("/voices")
 async def list_voices():
-    """列出可用音色"""
+    """列出可用的声音"""
     return {
         "voices": [
-            {"id": "af_heart", "name": "女声-温柔", "language": "zh-CN"},
-            {"id": "af_bella", "name": "女声-活泼", "language": "zh-CN"},
-            {"id": "am_michael", "name": "男声-沉稳", "language": "zh-CN"},
-            {"id": "am_patriot", "name": "男声-活力", "language": "zh-CN"},
+            {"id": "af_heart", "name": "温暖女声", "gender": "female"},
+            {"id": "af_bella", "name": "甜美女声", "gender": "female"},
+            {"id": "mf_man", "name": "沉稳男声", "gender": "male"}
         ]
     }
 
 
-@router.get("/audio/{audio_id}")
-async def get_audio(audio_id: str):
-    """获取生成的音频"""
-    from fastapi.responses import FileResponse
-    from app.core.config import settings
-
-    audio_path = os.path.join(settings.upload_dir, "tts", f"{audio_id}.wav")
+@router.get("/audio/{filename}")
+async def get_audio(filename: str):
+    """获取生成的音频文件"""
+    audio_path = os.path.join(settings.upload_dir, "audio", filename)
 
     if not os.path.exists(audio_path):
         raise HTTPException(status_code=404, detail="Audio not found")
