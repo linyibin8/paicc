@@ -174,7 +174,11 @@ class QAService {
     private func speakAnswer(_ answer: String) async {
         // 使用 TTS 服务获取音频
         do {
-            let ttsEndpoint = APIConfig.localTTSURL + "/api/v1/tts/synthesize"
+            #if DEBUG
+            let ttsEndpoint = APIConfig.localTTSURL + "/synthesize"
+            #else
+            let ttsEndpoint = APIConfig.ttsURL + "/synthesize"
+            #endif
             let audioData = try await apiClient.synthesize(text: answer, voice: "zh-CN")
             speechService.playAudioData(audioData)
         } catch {

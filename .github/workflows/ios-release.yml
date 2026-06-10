@@ -1,0 +1,57 @@
+name: Release iOS App
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-upload:
+    runs-on: macos-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Install XcodeGen
+        run: |
+          brew install xcodegen
+          
+      - name: Generate Xcode project
+        run: |
+          cd ios
+          xcodegen generate
+          
+      - name: Setup keychain
+        run: |
+          security create-keychain -p "" build-keychain
+          security set-keychain-settings build-keychain
+          security unlock-keychain -p "" build-keychain
+          
+      - name: Build iOS
+        run: |
+          cd ios
+          xcodebuild -project PAICC.xcodeproj \
+            -scheme PAICC \
+            -configuration Release \
+            -sdk iphoneos \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGNING_ALLOWED=NO \
+            DEVELOPMENT_TEAM=N3G45G5H74 \
+            -archivePath build/PAICC.xcarchive \
+            archive
+          
+      - name: Export IPA
+        run: |
+          cd ios
+          mkdir -p build/Payload
+          cp -R build/Release-iphoneos/PAICC.app build/Payload/
+          cd build && zip -r PAICC.ipa Payload
+          
+      - name: Upload to TestFlight
+        uses: apple-actions/upload-testflight-releases@v1
+        with:
+          app-path: ios/build/PAICC.ipa
+          api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
+          api-key-issuer: ${{ secrets.APPSTORE_KEY_ISSUER }}
+          api-key-content: ${{ secrets.APPSTORE_KEY_CONTENT }}
