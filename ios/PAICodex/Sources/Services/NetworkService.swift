@@ -15,8 +15,10 @@ class NetworkService: ObservableObject {
     private var session: URLSession?
 
     // 后端地址
-    private let baseURL = "http://100.64.0.13:8029"
-    private let wsURL = "ws://100.64.0.13:8029"
+    // 开发环境: http://100.64.0.13:8029
+    // 生产环境: https://api.pai-cc.evowit.com
+    private let baseURL = "https://api.pai-cc.evowit.com"
+    private let wsURL = "wss://api.pai-cc.evowit.com/ws"
 
     enum NetworkError: Error {
         case connectionFailed
