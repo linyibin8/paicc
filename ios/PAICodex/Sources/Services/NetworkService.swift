@@ -15,8 +15,8 @@ class NetworkService: ObservableObject {
     private var session: URLSession?
 
     // 后端地址
-    private let baseURL = "http://100.64.0.13:8027"
-    private let wsURL = "ws://100.64.0.13:8027"
+    private let baseURL = "http://100.64.0.13:8029"
+    private let wsURL = "ws://100.64.0.13:8029"
 
     enum NetworkError: Error {
         case connectionFailed

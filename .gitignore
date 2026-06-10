@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.env
+*.egg-info/
+
+# iOS
+*.xcuserstate
+*.xcsettings
+*.moved-aside
+DerivedData/
+build/
+*.xcodeproj/
+*.xcworkspace/
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Uploads
+uploads/
+*.jpg
+*.png
+*.wav
+
+# Node
+node_modules/
+
+# Swift Package Manager
+.swiftpm/
