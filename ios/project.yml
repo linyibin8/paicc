@@ -14,9 +14,8 @@ settings:
     CURRENT_PROJECT_VERSION: "1"
     SWIFT_VERSION: "5.0"
     DEVELOPMENT_TEAM: "N3G45G5H74"
-    CODE_SIGN_STYLE: Manual
-    CODE_SIGNING_REQUIRED: "NO"
-    CODE_SIGNING_ALLOWED: "NO"
+    CODE_SIGN_STYLE: Automatic
+    CODE_SIGN_IDENTITY: "Apple Distribution: Shenzhen Youdezhe Technology Co., Ltd. (N3G45G5H74)"
 
 targets:
   PAICC:
