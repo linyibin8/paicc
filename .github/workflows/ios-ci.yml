@@ -1,21 +1,19 @@
-name: iOS Release
+name: iOS CI
 
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
-  workflow_dispatch:
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  release:
+  build:
     runs-on: macos-15
     env:
       APP_NAME: PAI-CC
       APP_BUNDLE_ID: com.evowit.paicc
-      APP_SKU: paicc001
       APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
       APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
       APP_STORE_CONNECT_API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}
@@ -24,8 +22,6 @@ jobs:
       BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
       P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
       KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-      APPLE_ID: ${{ secrets.APPLE_ID }}
-      APP_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
 
     steps:
       - name: Checkout
@@ -43,8 +39,5 @@ jobs:
       - name: Prepare signing
         run: bash scripts/setup_ci_signing.sh
 
-      - name: Create App Store Connect app if needed
-        run: bundle exec fastlane ios ensure_app_store_connect_app
-
-      - name: Upload to TestFlight
-        run: bundle exec fastlane ios beta
+      - name: Build
+        run: xcodebuild -project ios/PAICC.xcodeproj -scheme PAICC -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 16' build CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY="Apple Distribution: Shenzhen Youdezhe Technology Co., Ltd. (N3G45G5H74)" DEVELOPMENT_TEAM=N3G45G5H74

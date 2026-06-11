@@ -1,0 +1,100 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Create the App Store Connect record if it does not exist"
+  lane :ensure_app_store_connect_app do
+    require "base64"
+
+    api_key = app_store_connect_api_key(
+      key_id: ENV.fetch("APP_STORE_CONNECT_KEY_ID"),
+      issuer_id: ENV.fetch("APP_STORE_CONNECT_ISSUER_ID"),
+      key_content: ENV.fetch("APP_STORE_CONNECT_API_KEY_BASE64"),
+      is_key_content_base64: true,
+      duration: 1200
+    )
+
+    bundle_id = ENV.fetch("APP_BUNDLE_ID", "com.evowit.paicc")
+    app_name = ENV.fetch("APP_NAME", "PAI-CC")
+    sku = ENV.fetch("APP_SKU", "paicc001")
+
+    existing = Spaceship::ConnectAPI::App.all(filter: { bundleId: bundle_id }).first
+    if existing
+      UI.message("App Store Connect app already exists for #{bundle_id}")
+      next
+    end
+
+    Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.from(hash: api_key)
+    Spaceship::ConnectAPI::App.create(
+      name: app_name,
+      version_string: ENV.fetch("APP_VERSION", "1.0.0"),
+      primary_locale: "zh-Hans",
+      bundle_id: bundle_id,
+      sku: sku,
+      platforms: ["IOS"]
+    )
+  end
+
+  desc "Archive the app and upload it to TestFlight"
+  lane :beta do
+    api_key = app_store_connect_api_key(
+      key_id: ENV.fetch("APP_STORE_CONNECT_KEY_ID"),
+      issuer_id: ENV.fetch("APP_STORE_CONNECT_ISSUER_ID"),
+      key_content: ENV.fetch("APP_STORE_CONNECT_API_KEY_BASE64"),
+      is_key_content_base64: true,
+      duration: 1200
+    )
+
+    key_path = ENV.fetch("APP_STORE_CONNECT_API_KEY_PATH")
+    key_id = ENV.fetch("APP_STORE_CONNECT_KEY_ID")
+    issuer_id = ENV.fetch("APP_STORE_CONNECT_ISSUER_ID")
+    team_id = ENV.fetch("APPLE_TEAM_ID")
+    project_root = File.expand_path("..", __dir__)
+    build_dir = "build"
+    archive_path = File.join(build_dir, "PAICC.xcarchive")
+    export_path = File.join(build_dir, "export")
+
+    Dir.chdir(project_root) do
+      sh("cd ios && xcodegen generate")
+      sh("mkdir -p #{build_dir.shellescape}")
+
+      sh(
+        [
+          "xcodebuild",
+          "-project", "ios/PAICC.xcodeproj",
+          "-scheme", "PAICC",
+          "-configuration", "Release",
+          "-destination", "generic/platform=iOS",
+          "-archivePath", archive_path,
+          "CODE_SIGNING_ALLOWED=NO",
+          "APPLE_TEAM_ID=#{team_id}",
+          "-allowProvisioningUpdates",
+          "-authenticationKeyPath", key_path,
+          "-authenticationKeyID", key_id,
+          "-authenticationKeyIssuerID", issuer_id,
+          "clean",
+          "archive"
+        ].shelljoin
+      )
+
+      sh(
+        [
+          "xcodebuild",
+          "-exportArchive",
+          "-archivePath", archive_path,
+          "-exportPath", export_path,
+          "-exportOptionsPlist", "ExportOptions.plist",
+          "-allowProvisioningUpdates",
+          "-authenticationKeyPath", key_path,
+          "-authenticationKeyID", key_id,
+          "-authenticationKeyIssuerID", issuer_id
+        ].shelljoin
+      )
+    end
+
+    pilot(
+      api_key: api_key,
+      ipa: File.join(export_path, "PAICC.ipa"),
+      skip_waiting_for_build_processing: true
+    )
+  end
+end
