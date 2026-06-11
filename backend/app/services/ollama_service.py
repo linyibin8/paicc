@@ -3,9 +3,14 @@ PAI-CC Ollama AI 服务
 """
 import httpx
 import json
-from typing import List, Dict, Optional, AsyncIterator
+from typing import List, Dict, Optional, AsyncIterator, Union, Any
 import base64
 from app.core.config import settings
+
+
+# 消息内容类型：可以是字符串或包含 image_url 的列表
+MessageContent = Union[str, List[Dict[str, Any]]]
+Message = Dict[str, Any]
 
 
 class OllamaService:
@@ -18,7 +23,7 @@ class OllamaService:
 
     async def chat(
         self,
-        messages: List[Dict[str, str]],
+        messages: List[Message],
         stream: bool = False,
         temperature: float = 0.7,
         max_tokens: int = 1024
@@ -27,7 +32,12 @@ class OllamaService:
         发送聊天请求
 
         Args:
-            messages: 消息列表 [{"role": "user", "content": "..."}]
+            messages: 消息列表，支持多种格式：
+                - 简单文本: [{"role": "user", "content": "..."}]
+                - 带图片: [{"role": "user", "content": [
+                    {"type": "text", "text": "..."},
+                    {"type": "image_url", "image_url": {"url": "data:image/jpeg;base64,..."}}
+                ]}]
             stream: 是否流式返回
             temperature: 温度参数
             max_tokens: 最大 token 数
@@ -57,10 +67,13 @@ class OllamaService:
 
     async def chat_stream(
         self,
-        messages: List[Dict[str, str]],
+        messages: List[Message],
     ) -> AsyncIterator[str]:
         """
         流式聊天
+
+        Args:
+            messages: 消息列表，支持多种格式（同 chat 方法）
 
         Yields:
             每次返回一个文本片段
@@ -204,6 +217,55 @@ class OllamaService:
 
         result = await self.chat(messages, temperature=0.5, max_tokens=2048)
         return {"report": result["choices"][0]["message"]["content"]}
+
+    async def check_vision_capability(self) -> bool:
+        """
+        检测模型是否支持视觉/图片输入
+
+        通过发送一个包含简单图片的请求来检测
+
+        Returns:
+            True 如果支持 vision，False 如果不支持
+        """
+        # 创建一个最小的白色 1x1 PNG 图片作为测试
+        # PNG 文件头 + IHDR + IDAT + IEND (最小有效 PNG)
+        minimal_png_base64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+
+        test_messages = [
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": "Hi"},
+                    {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{minimal_png_base64}"}}
+                ]
+            }
+        ]
+
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                response = await client.post(
+                    f"{self.base_url}/chat/completions",
+                    json={
+                        "model": self.model,
+                        "messages": test_messages,
+                        "max_tokens": 5
+                    },
+                    headers={"Authorization": f"Bearer {self.api_key}"}
+                )
+
+                # 422 通常表示模型不支持该参数（vision）
+                if response.status_code == 422:
+                    return False
+
+                # 其他 2xx 状态码表示支持
+                if response.status_code < 300:
+                    return True
+
+                return False
+
+        except Exception as e:
+            print(f"Vision capability check failed: {e}")
+            return False
 
 
 # 全局单例

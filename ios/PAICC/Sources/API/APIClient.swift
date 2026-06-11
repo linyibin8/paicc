@@ -6,6 +6,7 @@ class APIClient {
 
     private let session: URLSession
     private let baseURL: String
+    private let wsBaseURL: String
 
     private init() {
         let config = URLSessionConfiguration.default
@@ -15,9 +16,28 @@ class APIClient {
 
         #if DEBUG
         baseURL = APIConfig.localBaseURL
+        wsBaseURL = APIConfig.wsBaseURL
         #else
         baseURL = APIConfig.baseURL
+        wsBaseURL = APIConfig.wsBaseURL
         #endif
+    }
+
+    // MARK: - 服务器 URL
+
+    /// 获取 WebSocket URL
+    func webSocketURL(sessionId: String) -> URL? {
+        return URL(string: "\(wsBaseURL)/\(sessionId)")
+    }
+
+    /// 获取 QA Ask URL
+    func qaAskURL() -> URL? {
+        return URL(string: "\(baseURL)/qa/ask")
+    }
+
+    /// 获取 TTS 合成 URL
+    func ttsSynthesizeURL() -> URL? {
+        return URL(string: "\(baseURL)/tts/synthesize")
     }
 
     // MARK: - 会话管理
@@ -92,18 +112,69 @@ class APIClient {
         return try JSONDecoder().decode(QAResponse.self, from: data)
     }
 
-    // MARK: - TTS
+    /// 构建 QA 请求体
+    func buildQARequest(query: String, imageBase64: String? = nil, context: String? = nil, sessionId: String? = nil, studentGoal: String? = nil) -> QARequest {
+        return QARequest(
+            query: query,
+            imageBase64: imageBase64,
+            context: context,
+            sessionId: sessionId,
+            studentGoal: studentGoal
+        )
+    }
 
-    func synthesize(text: String, voice: String = "af_heart") async throws -> Data {
+    // MARK: - TTS 语音合成
+
+    /// 同步合成语音（返回音频数据）
+    func synthesize(text: String, voice: String = "zh-CN") async throws -> Data {
         let endpoint = "\(baseURL)/tts/synthesize"
 
-        let body: [String: String] = [
+        let body: [String: Any] = [
             "text": text,
             "voice": voice
         ]
 
         let data = try await post(endpoint, body: body)
         return data
+    }
+
+    /// 异步合成语音（返回下载 URL）
+    func synthesizeAsync(text: String, voice: String = "zh-CN", format: String = "mp3") async throws -> TTSDownloadResponse {
+        let endpoint = "\(baseURL)/tts/synthesize"
+
+        let body = TTSDownloadRequest(text: text, voice: voice, format: format)
+        let encoder = JSONEncoder()
+        let data = try await post(endpoint, body: encoder.encode(body))
+        return try JSONDecoder().decode(TTSDownloadResponse.self, from: data)
+    }
+
+    /// 下载 TTS 音频文件
+    func downloadTTSAudio(from urlString: String) async throws -> Data {
+        guard let url = URL(string: urlString) else {
+            throw APIError.invalidURL
+        }
+
+        let (data, response) = try await session.data(from: url)
+
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw APIError.serverError
+        }
+
+        return data
+    }
+
+    /// 下载 TTS 音频并保存到本地
+    func downloadAndSaveTTSAudio(text: String, voice: String = "zh-CN", filename: String? = nil) async throws -> URL {
+        let response = try await synthesizeAsync(text: text, voice: voice)
+        let audioData = try await downloadTTSAudio(from: response.downloadUrl)
+
+        let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let audioFilename = filename ?? "tts_\(UUID().uuidString).mp3"
+        let fileURL = documentsPath.appendingPathComponent(audioFilename)
+
+        try audioData.write(to: fileURL)
+        return fileURL
     }
 
     // MARK: - 错题
@@ -200,9 +271,28 @@ struct CreateSessionResponse: Codable {
 
 // MARK: - 错误
 
-enum APIError: Error {
+enum APIError: Error, LocalizedError {
     case invalidURL
     case serverError
     case decodingError
     case networkError
+    case noData
+    case timeout
+
+    var errorDescription: String? {
+        switch self {
+        case .invalidURL:
+            return "无效的 URL"
+        case .serverError:
+            return "服务器错误"
+        case .decodingError:
+            return "数据解析错误"
+        case .networkError:
+            return "网络错误"
+        case .noData:
+            return "无数据返回"
+        case .timeout:
+            return "请求超时"
+        }
+    }
 }

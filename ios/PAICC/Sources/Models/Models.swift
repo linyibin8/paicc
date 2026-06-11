@@ -7,8 +7,13 @@ struct APIConfig {
 
     // 本地测试用
     #if DEBUG
-    static let localBaseURL = "http://100.64.0.13:8027/api/v1"
-    static let localTTSURL = "http://100.64.0.13:8880"
+    static let localBaseURL = "http://100.64.0.13:8090/api/v1"
+    static let localTTSURL = "http://100.64.0.13:8090"
+    static let wsBaseURL = "ws://100.64.0.13:8090/api/v1/qa/ws"
+    #else
+    static let localBaseURL = ""
+    static let localTTSURL = ""
+    static let wsBaseURL = "wss://api.pai-cc.evowit.com/api/v1/qa/ws"
     #endif
 }
 
@@ -134,5 +139,81 @@ struct TTSResponse: Codable {
     enum CodingKeys: String, CodingKey {
         case audioUrl = "audio_url"
         case duration
+    }
+}
+
+// MARK: - WebSocket 消息模型
+
+/// WebSocket 消息类型
+enum WSMessageType: String, Codable {
+    case start = "start"
+    case partial = "partial"
+    case complete = "complete"
+    case error = "error"
+    case ping = "ping"
+    case pong = "pong"
+    case query = "query"
+    case connect = "connect"
+}
+
+/// WebSocket 消息
+struct WSMessage: Codable {
+    let type: WSMessageType
+    let content: String?
+    let sessionId: String?
+    let query: String?
+    let imageBase64: String?
+    let client: String?
+    let version: String?
+
+    enum CodingKeys: String, CodingKey {
+        case type
+        case content
+        case sessionId = "session_id"
+        case query
+        case imageBase64 = "image_base64"
+        case client
+        case version
+    }
+}
+
+/// WebSocket 流式响应片段
+struct StreamingChunk: Codable {
+    let index: Int
+    let content: String
+    let isFinal: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case index
+        case content
+        case isFinal = "is_final"
+    }
+}
+
+// MARK: - TTS 下载模型
+
+/// TTS 下载请求
+struct TTSDownloadRequest: Codable {
+    let text: String
+    let voice: String
+    let format: String
+
+    enum CodingKeys: String, CodingKey {
+        case text
+        case voice
+        case format
+    }
+}
+
+/// TTS 下载响应
+struct TTSDownloadResponse: Codable {
+    let downloadUrl: String
+    let duration: Double?
+    let fileSize: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case downloadUrl = "download_url"
+        case duration
+        case fileSize = "file_size"
     }
 }
