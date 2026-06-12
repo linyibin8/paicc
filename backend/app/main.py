@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 import os
 
 from app.core.config import settings
-from app.api import captures, sessions, qa, tts, mistakes, review_queue, student_profile, dashboard
+from app.api import captures, sessions, qa, tts, mistakes, review_queue, student_profile, dashboard, observability, logs, assets
 
 app = FastAPI(
     title="PAI-CC API",
@@ -42,6 +42,9 @@ app.include_router(mistakes.router, prefix="/api/v1/mistakes", tags=["错题管�
 app.include_router(review_queue.router, prefix="/api/v1/review-queue", tags=["复习队列"])
 app.include_router(student_profile.router, prefix="/api/v1/student-profile", tags=["学生画像"])
 app.include_router(dashboard.router, prefix="/api/v1/dashboard", tags=["Dashboard统计"])
+app.include_router(observability.router, prefix="/api/v1/observability", tags=["系统可观测性"])
+app.include_router(logs.router, prefix="/api/v1/logs", tags=["日志"])
+app.include_router(assets.router, prefix="/api/v1/assets", tags=["学习资产"])
 
 
 @app.get("/")
