@@ -1,0 +1,61 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Archive the app and upload it to TestFlight"
+  lane :upload_testflight do
+    # 配置
+    project_dir = "/Users/macstar/Projects/PAICC/ios"
+    private_key_path = "#{project_dir}/private_keys/AuthKey_47SU743ZHZ.p8"
+    key_id = "47SU743ZHZ"
+    issuer_id = "e5e4b9b8-e882-4f89-a35b-8f7fc95edfef"
+    team_id = "N3G45G5H74"
+    build_dir = "#{project_dir}/build"
+    archive_path = "#{build_dir}/PAICC.xcarchive"
+    export_path = "#{build_dir}/export"
+    
+    # 确保 build 目录存在
+    sh("mkdir -p #{build_dir}")
+    
+    # 清理旧构建
+    sh("rm -rf #{archive_path} #{export_path}")
+    
+    # 生成 Xcode 项目（如果需要）
+    sh("cd #{project_dir} && ~/bin/xcodegen generate")
+    
+    # 清理 DerivedData
+    sh("rm -rf ~/Library/Developer/Xcode/DerivedData/PAICC-*")
+    
+    # Archive
+    puts "Starting archive..."
+    archive_cmd = "xcodebuild -project #{project_dir}/PAICC.xcodeproj -scheme PAICC -configuration Release -destination generic/platform=iOS -archivePath #{archive_path} CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=#{team_id} CODE_SIGNING_ALLOWED=YES -authenticationKeyPath #{private_key_path} -authenticationKeyID #{key_id} -authenticationKeyIssuerID #{issuer_id} clean archive 2>&1"
+    result = sh(archive_cmd)
+    puts result
+    
+    # 检查 archive 是否成功
+    if File.exist?(archive_path)
+      puts "Archive created successfully!"
+      
+      # Export
+      sh("mkdir -p #{export_path}")
+      
+      export_cmd = "xcodebuild -exportArchive -archivePath #{archive_path} -exportPath #{export_path} -exportOptionsPlist #{project_dir}/build/exportOptions.plist -authenticationKeyPath #{private_key_path} -authenticationKeyID #{key_id} -authenticationKeyIssuerID #{issuer_id} 2>&1"
+      sh(export_cmd)
+      
+      # 上传到 TestFlight
+      api_key = app_store_connect_api_key(
+        key_id: key_id,
+        issuer_id: issuer_id,
+        key_filepath: private_key_path
+      )
+      
+      upload_to_testflight(
+        api_key: api_key,
+        ipa: "#{export_path}/PAICC.ipa",
+        skip_waiting_for_build_processing: false
+      )
+    else
+      puts "Archive failed!"
+      exit 1
+    end
+  end
+end

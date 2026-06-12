@@ -2,7 +2,7 @@
 PAI-CC 复习队列 API
 基于间隔重复算法 (Spaced Repetition) 管理复习任务
 """
-from fastapi import APIRouter, HTTPException, Query, Form
+from fastapi import APIRouter, HTTPException, Query
 from typing import Optional, List
 from pydantic import BaseModel
 from datetime import datetime, timedelta
@@ -113,12 +113,12 @@ def init_queue_for_mistakes(student_id: str, subject: str, difficulty: float):
 
 @router.post("/add")
 async def add_to_queue(
-    student_id: str = Form(...),
-    mistake_id: str = Form(...),
-    question_text: str = Form(...),
-    correct_answer: Optional[str] = Form(None),
-    difficulty: float = Form(0.5),
-    due_date: Optional[datetime] = Form(None)
+    student_id: str,
+    mistake_id: str,
+    question_text: str,
+    correct_answer: Optional[str] = None,
+    difficulty: float = 0.5,
+    due_date: Optional[datetime] = None
 ):
     """添加复习项到队列"""
     queue_id = str(uuid.uuid4())

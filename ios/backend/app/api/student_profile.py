@@ -196,17 +196,11 @@ async def get_student_stats(student_id: str):
 
     # 计算额外统计
     from app.api.mistakes import _mistakes
+    from app.api.sessions import _sessions
     from app.api.review_queue import _review_queue
-    from app.models.database import get_db
-    from app.models.models import Session as SessionModel
-
-    # 查询数据库中的会话
-    db = next(get_db())
-    student_sessions = db.query(SessionModel).filter(
-        SessionModel.student_id == student_id  # 注意：这是 student 表的 id，不是 student_id 字符串
-    ).all()
 
     student_mistakes = [m for m in _mistakes.values() if m["student_id"] == student_id]
+    student_sessions = [s for s in _sessions.values() if s.get("student_id") == student_id]
     student_reviews = [r for r in _review_queue.values() if r["student_id"] == student_id]
 
     # 计算正确率

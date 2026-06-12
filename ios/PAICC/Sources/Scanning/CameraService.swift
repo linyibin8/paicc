@@ -273,6 +273,3 @@ extension CameraService: AVCaptureVideoDataOutputSampleBufferDelegate {
     }
 }
 
-// MARK: - CaseIterable
-
-extension GestureType: CaseIterable {}

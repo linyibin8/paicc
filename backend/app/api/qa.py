@@ -725,7 +725,20 @@ async def websocket_qa(websocket: WebSocket, session_id: str):
             data = await websocket.receive_json()
             msg_type = data.get("type")
 
-            if msg_type == "ask":
+            if msg_type == "connect":
+                # ========== 客户端连接 ==========
+                client = data.get("client", "unknown")
+                version = data.get("version", "1.0")
+                print(f"Client connected: {client} v{version}")
+                await ws_manager.send_json(session_id, {
+                    "type": "connected",
+                    "status": "ok",
+                    "client": client,
+                    "version": version,
+                    "message": "连接成功"
+                })
+
+            elif msg_type == "ask":
                 # ========== 处理提问 ==========
                 await ws_manager.send_json(session_id, {
                     "type": StreamMessageType.THINKING.value,

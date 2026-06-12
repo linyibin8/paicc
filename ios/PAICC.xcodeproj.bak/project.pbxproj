@@ -14,8 +14,8 @@
 		A864995FE2F1AED8CFD1565C /* CaptureService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8CAB271FDE83047444B926 /* CaptureService.swift */; };
 		AC73F7425AC67665FA4CB8AF /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966278E95FA83F32163B1970 /* AppState.swift */; };
 		BB3DB80C510BB9C28B2C6CB9 /* VoiceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E87B06EE8A4141A9977DF140 /* VoiceService.swift */; };
-		C0BF36ADBBB1160D71436CBE /* QAService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31C2B2721B733CBEB90C1BC9 /* QAService.swift */; };
-		DFADBEA5F697A215651AEDAB /* QAWebSocketClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF19E7B5C1E81E0FCECE986 /* QAWebSocketClient.swift */; };
+		C0BF36ADBBB1160D71436CBE /* QAService.swift in Sources */ = {isa = PBXBuildFile;
+		DFADBEA5F697A215651AEDAB /* QAWebSocketClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF19E7B5C1E81E0FCECE986 /* QAWebSocketClient.swift */; }; fileRef = 31C2B2721B733CBEB90C1BC9 /* QAService.swift */; };
 		C4BC9BC8B54F81C2519DA01D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C8AAC77EFF01769498AA5D /* SceneDelegate.swift */; };
 		E59AC98AEFF417C04ED89F6B /* QAOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAC6780B9C9A6BC9AEBDE205 /* QAOverlayView.swift */; };
 		E6B3CF302C9CB26B900E5202 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B0328A89260736B622462B0 /* Models.swift */; };
@@ -27,8 +27,8 @@
 /* Begin PBXFileReference section */
 		0E80489BF5F5F08E87C330FF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		14EDF9DF45B929901BFB7153 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		31C2B2721B733CBEB90C1BC9 /* QAService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QAService.swift; sourceTree = "<group>"; };
-		7AF19E7B5C1E81E0FCECE986 /* QAWebSocketClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QAWebSocketClient.swift; sourceTree = "<group>"; };
+		31C2B2721B733CBEB90C1BC9 /* QAService.swift */ = {isa = PBXFileReference;
+		7AF19E7B5C1E81E0FCECE986 /* QAWebSocketClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QAWebSocketClient.swift; sourceTree = "<group>"; }; lastKnownFileType = sourcecode.swift; path = QAService.swift; sourceTree = "<group>"; };
 		3259426E54BC559C7821F5F3 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		43496BE05F43AFF3D72CE32C /* PAICC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PAICC.entitlements; sourceTree = "<group>"; };
 		4FADCE71431B2B6EED10430A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -133,8 +133,8 @@
 			children = (
 				EAC6780B9C9A6BC9AEBDE205 /* QAOverlayView.swift */,
 				31C2B2721B733CBEB90C1BC9 /* QAService.swift */,
-				7AF19E7B5C1E81E0FCECE986 /* QAWebSocketClient.swift */,
 			);
+		7AF19E7B5C1E81E0FCECE986 /* QAWebSocketClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QAWebSocketClient.swift; sourceTree = "<group>"; };
 			path = QA;
 			sourceTree = "<group>";
 		};
@@ -260,10 +260,10 @@
 				E6B3CF302C9CB26B900E5202 /* Models.swift in Sources */,
 				E59AC98AEFF417C04ED89F6B /* QAOverlayView.swift in Sources */,
 				C0BF36ADBBB1160D71436CBE /* QAService.swift in Sources */,
-				DFADBEA5F697A215651AEDAB /* QAWebSocketClient.swift in Sources */,
 				C4BC9BC8B54F81C2519DA01D /* SceneDelegate.swift in Sources */,
 				BB3DB80C510BB9C28B2C6CB9 /* VoiceService.swift in Sources */,
 			);
+		DFADBEA5F697A215651AEDAB /* QAWebSocketClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF19E7B5C1E81E0FCECE986 /* QAWebSocketClient.swift */; };
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
@@ -273,7 +273,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Distribution: Shenzhen Youdezhe Technology Co., Ltd. (N3G45G5H74)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = N3G45G5H74;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -288,10 +288,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGNING_ALLOWED = YES;
-				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_ENTITLEMENTS = PAICC/Sources/App/PAICC.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Distribution: Shenzhen Youdezhe Technology Co., Ltd. (N3G45G5H74)";
+				CODE_SIGN_IDENTITY = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = PAICC/Sources/App/Info.plist;
@@ -308,10 +308,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGNING_ALLOWED = YES;
-				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_ENTITLEMENTS = PAICC/Sources/App/PAICC.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Distribution: Shenzhen Youdezhe Technology Co., Ltd. (N3G45G5H74)";
+				CODE_SIGN_IDENTITY = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = PAICC/Sources/App/Info.plist;
@@ -327,7 +327,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Distribution: Shenzhen Youdezhe Technology Co., Ltd. (N3G45G5H74)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = N3G45G5H74;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
