@@ -88,7 +88,15 @@ class CameraService: NSObject {
         defer { frameLock.unlock() }
 
         guard let pixelBuffer = currentFrame else { return nil }
-        return pixelBuffer.toUIImage()
+
+        // 在锁外进行图像转换，避免长时间持有锁
+        let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+        let context = CIContext()
+        guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else {
+            return nil
+        }
+
+        return UIImage(cgImage: cgImage)
     }
 
     func captureCurrentFrameData() -> Data? {

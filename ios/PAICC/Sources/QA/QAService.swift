@@ -84,7 +84,6 @@ class QAService: NSObject {
 
     private let apiClient = APIClient.shared
     private let voiceService = VoiceService.shared
-    private let speechService = VoiceService()
     private var webSocketClient: QAWebSocketClient?
 
     private var currentImage: UIImage?
@@ -126,18 +125,18 @@ class QAService: NSObject {
 
     // MARK: - 初始化
 
-    private override init() {
+    override init() {
         super.init()
         setupVoiceCallbacks()
         setupGestureCallbacks()
     }
 
     private func setupVoiceCallbacks() {
-        speechService.onSpeechResult = { [weak self] text in
+        voiceService.onSpeechResult = { [weak self] text, _ in
             self?.handleVoiceInput(text)
         }
 
-        speechService.onListeningStateChanged = { [weak self] isListening in
+        voiceService.onListeningStateChanged = { [weak self] isListening in
             if !isListening {
                 self?.checkAndProcessInput()
             }
@@ -228,17 +227,17 @@ class QAService: NSObject {
     }
 
     private func startListening() {
-        speechService.speak("请说")
+        voiceService.speak("请说")
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             self?.state = .listening
-            self?.speechService.startListening()
+            self?.voiceService.startListening()
         }
     }
 
     private func handleVoiceInput(_ text: String) {
         pendingQuery = text
-        speechService.resetSilenceTimer()
+        voiceService.resetSilenceTimer()
     }
 
     private func checkAndProcessInput() {
@@ -251,7 +250,7 @@ class QAService: NSObject {
 
         pendingQuery = nil
 
-        speechService.speak("好的")
+        voiceService.speak("好的")
 
         state = .thinking
         onThinkingStarted?()
@@ -329,7 +328,7 @@ class QAService: NSObject {
         } catch {
             await MainActor.run {
                 onThinkingEnded?()
-                speechService.speak("抱歉，发生了错误")
+                voiceService.speak("抱歉，发生了错误")
             }
         }
     }
@@ -393,7 +392,7 @@ class QAService: NSObject {
         isInterrupted = true
 
         // 停止当前所有操作
-        speechService.stopSpeaking()
+        voiceService.stopSpeaking()
 
         if isStreamingResponse {
             // 通知 WebSocket 打断
@@ -406,12 +405,12 @@ class QAService: NSObject {
         onInterrupted?()
 
         // TTS 播报 "请说"
-        speechService.speak("请说")
+        voiceService.speak("请说")
 
         // 重新开始聆听
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             self?.state = .listening
-            self?.speechService.startListening()
+            self?.voiceService.startListening()
         }
     }
 
@@ -421,7 +420,7 @@ class QAService: NSObject {
 
         // 如果正在播报，打断后开始追问
         if state == .speaking {
-            speechService.stopSpeaking()
+            voiceService.stopSpeaking()
         }
 
         // 直接处理追问
@@ -440,7 +439,7 @@ class QAService: NSObject {
 
         // 获取最后一个 AI 回答
         if let lastAssistantMessage = conversationHistory.last(where: { $0.role == "assistant" }) {
-            speechService.stopSpeaking()
+            voiceService.stopSpeaking()
             state = .speaking
             Task {
                 await speakAnswer(lastAssistantMessage.content)
@@ -458,8 +457,8 @@ class QAService: NSObject {
         isStreamingResponse = false
         isInterrupted = false
 
-        speechService.stopSpeaking()
-        speechService.stopListening()
+        voiceService.stopSpeaking()
+        voiceService.stopListening()
         webSocketClient?.disconnect()
         autoDismissTimer?.invalidate()
         autoDismissTimer = nil
@@ -489,9 +488,9 @@ class QAService: NSObject {
             let ttsEndpoint = APIConfig.ttsURL + "/synthesize"
             #endif
             let audioData = try await apiClient.synthesize(text: answer, voice: "zh-CN")
-            speechService.playAudioData(audioData)
+            voiceService.playAudioData(audioData)
         } catch {
-            speechService.speak(answer)
+            voiceService.speak(answer)
         }
     }
 
@@ -795,9 +794,4 @@ extension QAService: QAWebSocketClientDelegate {
 
 // MARK: - Notification Extension
 
-extension Notification.Name {
-    static let qaStateChanged = Notification.Name("qaStateChanged")
-    static let qaHistoryUpdated = Notification.Name("qaHistoryUpdated")
-    static let qaInterrupted = Notification.Name("qaInterrupted")
-    static let qaTTSReady = Notification.Name("qaTTSReady")
-}
+// 注意: Notification.Name 扩展已在 AppState.swift 中定义

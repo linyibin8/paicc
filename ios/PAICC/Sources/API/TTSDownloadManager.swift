@@ -1,4 +1,5 @@
 import Foundation
+import AVFoundation
 
 /// TTS 下载状态
 enum TTSDownloadState {
@@ -270,7 +271,7 @@ extension VoiceService {
             audioPlayer?.delegate = self
             audioPlayer?.prepareToPlay()
             audioPlayer?.play()
-            updateState(.playing)
+            updateStateInternal(.playing)
         } catch {
             print("Failed to play audio file: \(error)")
         }

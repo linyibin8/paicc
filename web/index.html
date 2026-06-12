@@ -3,126 +3,494 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PAI-CC - 学习陪伴助手</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .container {
-            text-align: center;
-            color: white;
-            padding: 40px;
-        }
-        h1 { font-size: 3em; margin-bottom: 20px; }
-        .subtitle { font-size: 1.5em; opacity: 0.9; margin-bottom: 40px; }
-        .app-icon {
-            width: 120px;
-            height: 120px;
-            background: white;
-            border-radius: 30px;
-            margin: 0 auto 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 60px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            max-width: 800px;
-            margin: 40px auto;
-            text-align: left;
-        }
-        .feature {
-            background: rgba(255,255,255,0.2);
-            padding: 20px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-        }
-        .feature h3 { margin-bottom: 10px; }
-        .feature p { opacity: 0.8; font-size: 0.9em; }
-        .download {
-            margin-top: 40px;
-        }
-        .btn {
-            display: inline-block;
-            background: white;
-            color: #667eea;
-            padding: 15px 40px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.2em;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        .status {
-            margin-top: 30px;
-            padding: 20px;
-            background: rgba(255,255,255,0.15);
-            border-radius: 15px;
-            display: inline-block;
-        }
-        .status-dot {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            background: #4ade80;
-            border-radius: 50%;
-            margin-right: 8px;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-    </style>
+    <title>PAI-CC 学习陪伴管理系统</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="app-icon">📚</div>
-        <h1>PAI-CC</h1>
-        <p class="subtitle">你的智能学习陪伴助手</p>
-        
-        <div class="features">
-            <div class="feature">
-                <h3>📸 智能拍题</h3>
-                <p>拍摄题目，自动识别并解析答案</p>
-            </div>
-            <div class="feature">
-                <h3>🎤 语音问答</h3>
-                <p>语音指令，随时提问，智能回复</p>
-            </div>
-            <div class="feature">
-                <h3>✋ 手势交互</h3>
-                <p>手势控制，指向即答，无需点击</p>
-            </div>
-            <div class="feature">
-                <h3>📊 错题管理</h3>
-                <p>自动收集错题，智能复习提醒</p>
+    <!-- 侧边导航栏 -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <span class="logo-icon">📚</span>
+                <span class="logo-text">PAI-CC</span>
             </div>
         </div>
-        
-        <div class="download">
-            <p style="margin-bottom: 20px; opacity: 0.8;">即将发布 App Store</p>
-            <a href="#" class="btn">敬请期待</a>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-page="dashboard">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-page="sessions">
+                <span class="nav-icon">💬</span>
+                <span class="nav-text">会话管理</span>
+            </a>
+            <a href="#" class="nav-item" data-page="mistakes">
+                <span class="nav-icon">📝</span>
+                <span class="nav-text">错题管理</span>
+            </a>
+            <a href="#" class="nav-item" data-page="review">
+                <span class="nav-icon">🔄</span>
+                <span class="nav-text">复习队列</span>
+            </a>
+            <a href="#" class="nav-item" data-page="profile">
+                <span class="nav-icon">👤</span>
+                <span class="nav-text">学生画像</span>
+            </a>
+            <a href="#" class="nav-item" data-page="prompts">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-text">提示词配置</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="api-status" id="apiStatus">
+                <span class="status-dot"></span>
+                <span class="status-text">连接中...</span>
+            </div>
         </div>
-        
-        <div class="status">
-            <span class="status-dot"></span>
-            服务运行中 - API 版本 2.0.0
+    </aside>
+
+    <!-- 覆盖层 -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <!-- 顶部栏 -->
+        <header class="topbar">
+            <button class="menu-toggle" id="menuToggle">☰</button>
+            <h1 class="page-title" id="pageTitle">Dashboard</h1>
+            <div class="topbar-actions">
+                <button class="btn btn-refresh" id="refreshBtn" title="刷新数据">
+                    <span>🔄</span>
+                </button>
+                <div class="student-selector">
+                    <select id="studentSelect">
+                        <option value="default">默认学生</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <!-- 内容区域 -->
+        <div class="content-area" id="contentArea">
+            <!-- Dashboard 页面 -->
+            <section class="page" id="page-dashboard">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">👥</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="statStudents">--</span>
+                            <span class="stat-label">总学生数</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">🎯</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="statActiveToday">--</span>
+                            <span class="stat-label">今日活跃</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">💬</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="statSessionsToday">--</span>
+                            <span class="stat-label">今日会话</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">📸</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="statCapturesToday">--</span>
+                            <span class="stat-label">今日拍摄</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>📈 会话趋势（近7天）</h3>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="sessionTrendChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>📊 错题分布</h3>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="mistakeDistributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>⚠️ 薄弱知识点</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="weak-topics-list" id="weakTopicsList">
+                                <div class="loading">加载中...</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>🏆 活跃学生排行</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="top-students-list" id="topStudentsList">
+                                <div class="loading">加载中...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>🗓️ 学习热力图</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="heatmap-container" id="heatmapContainer"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 会话管理页面 -->
+            <section class="page hidden" id="page-sessions">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>会话列表</h3>
+                        <div class="card-actions">
+                            <select id="sessionStatusFilter">
+                                <option value="">全部状态</option>
+                                <option value="created">创建中</option>
+                                <option value="active">进行中</option>
+                                <option value="completed">已完成</option>
+                            </select>
+                            <button class="btn btn-sm btn-primary" onclick="createNewSession()">+ 新建会话</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table class="data-table" id="sessionsTable">
+                                <thead>
+                                    <tr>
+                                        <th>会话ID</th>
+                                        <th>状态</th>
+                                        <th>学习目标</th>
+                                        <th>截图数</th>
+                                        <th>错题数</th>
+                                        <th>创建时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td colspan="7" class="loading">加载中...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="pagination" id="sessionsPagination"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 错题管理页面 -->
+            <section class="page hidden" id="page-mistakes">
+                <div class="stats-grid stats-grid-4">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">📋</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="mistakesTotal">--</span>
+                            <span class="stat-label">总错题数</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">❌</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="mistakesNew">--</span>
+                            <span class="stat-label">新增</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">📖</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="mistakesReviewing">--</span>
+                            <span class="stat-label">复习中</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">✅</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="mistakesMastered">--</span>
+                            <span class="stat-label">已掌握</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>错题列表</h3>
+                        <div class="card-actions">
+                            <select id="mistakeSubjectFilter">
+                                <option value="">全部科目</option>
+                                <option value="数学">数学</option>
+                                <option value="物理">物理</option>
+                                <option value="化学">化学</option>
+                                <option value="英语">英语</option>
+                            </select>
+                            <select id="mistakeStatusFilter">
+                                <option value="">全部状态</option>
+                                <option value="new">新建</option>
+                                <option value="reviewing">复习中</option>
+                                <option value="mastered">已掌握</option>
+                            </select>
+                            <button class="btn btn-sm btn-primary" onclick="addMistake()">+ 添加错题</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table class="data-table" id="mistakesTable">
+                                <thead>
+                                    <tr>
+                                        <th>科目</th>
+                                        <th>知识点</th>
+                                        <th>题目内容</th>
+                                        <th>错误类型</th>
+                                        <th>难度</th>
+                                        <th>状态</th>
+                                        <th>复习次数</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td colspan="8" class="loading">加载中...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 复习队列页面 -->
+            <section class="page hidden" id="page-review">
+                <div class="stats-grid stats-grid-4">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">📋</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="reviewTotal">--</span>
+                            <span class="stat-label">总复习项</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">🔥</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="reviewDueToday">--</span>
+                            <span class="stat-label">今日待复习</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">📅</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="reviewDueWeek">--</span>
+                            <span class="stat-label">本周待复习</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">⏰</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="reviewOverdue">--</span>
+                            <span class="stat-label">已逾期</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>复习队列</h3>
+                        <div class="card-actions">
+                            <select id="reviewStatusFilter">
+                                <option value="">全部</option>
+                                <option value="due">待复习</option>
+                                <option value="upcoming">即将复习</option>
+                                <option value="mastered">已掌握</option>
+                            </select>
+                            <button class="btn btn-sm" onclick="syncReviewQueue()">🔄 同步错题</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="review-list" id="reviewList">
+                            <div class="loading">加载中...</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 学生画像页面 -->
+            <section class="page hidden" id="page-profile">
+                <div class="profile-container">
+                    <div class="card profile-summary">
+                        <div class="card-header">
+                            <h3>👤 学习概况</h3>
+                        </div>
+                        <div class="card-body" id="profileSummary">
+                            <div class="loading">加载中...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>📚 科目分析</h3>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="subjectAnalysisChart" style="max-height: 300px;"></canvas>
+                            <div class="subject-analysis" id="subjectAnalysis"></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>⚠️ 薄弱点分析</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="weakness-analysis" id="weaknessAnalysis">
+                                <div class="loading">加载中...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>📈 学习趋势</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="trend-controls">
+                            <button class="btn btn-sm active" data-period="week">本周</button>
+                            <button class="btn btn-sm" data-period="month">本月</button>
+                            <button class="btn btn-sm" data-period="all">全部</button>
+                        </div>
+                        <canvas id="learningTrendChart" style="max-height: 300px;"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>📋 进度报告</h3>
+                    </div>
+                    <div class="card-body" id="progressReport">
+                        <div class="loading">加载中...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 提示词配置页面 -->
+            <section class="page hidden" id="page-prompts">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>🤖 AI 系统提示词</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="prompt-editor">
+                            <textarea id="systemPrompt" rows="10" placeholder="输入系统提示词...">你是一位专业、耐心、富有同理心的AI学习陪伴助手。你的目标是帮助学生理解和掌握知识，培养良好的学习习惯，发现并补足知识薄弱点。在回答问题时，要循序渐进、深入浅出，同时注意引导学生主动思考，培养独立解决问题的能力。</textarea>
+                            <div class="prompt-actions">
+                                <button class="btn btn-primary" id="savePromptBtn">保存</button>
+                                <button class="btn" id="resetPromptBtn">重置</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>📋 快捷提示词模板</h3>
+                        <button class="btn btn-sm btn-primary" id="addTemplateBtn">+ 添加模板</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="templates-list" id="templatesList">
+                            <div class="template-item">
+                                <div class="template-header">
+                                    <span class="template-name">详细解答</span>
+                                    <div class="template-actions">
+                                        <button class="btn btn-xs">编辑</button>
+                                        <button class="btn btn-xs btn-danger">删除</button>
+                                    </div>
+                                </div>
+                                <div class="template-content">请详细解答这道题目，包括解题步骤、知识点讲解和易错点提示。</div>
+                            </div>
+                            <div class="template-item">
+                                <div class="template-header">
+                                    <span class="template-name">举一反三</span>
+                                    <div class="template-actions">
+                                        <button class="btn btn-xs">编辑</button>
+                                        <button class="btn btn-xs btn-danger">删除</button>
+                                    </div>
+                                </div>
+                                <div class="template-content">请根据这道题目的知识点，出一道类似的练习题。</div>
+                            </div>
+                            <div class="template-item">
+                                <div class="template-header">
+                                    <span class="template-name">概念讲解</span>
+                                    <div class="template-actions">
+                                        <button class="btn btn-xs">编辑</button>
+                                        <button class="btn btn-xs btn-danger">删除</button>
+                                    </div>
+                                </div>
+                                <div class="template-content">请讲解这个概念的本质含义，并举例说明。</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>⚙️ AI 参数配置</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="config-grid">
+                            <div class="config-item">
+                                <label>模型名称</label>
+                                <input type="text" id="modelName" value="llama3.2-vision" readonly>
+                            </div>
+                            <div class="config-item">
+                                <label>Temperature</label>
+                                <input type="range" id="temperature" min="0" max="2" step="0.1" value="0.7">
+                                <span class="config-value" id="temperatureValue">0.7</span>
+                            </div>
+                            <div class="config-item">
+                                <label>最大回复长度</label>
+                                <input type="number" id="maxTokens" value="2048" min="256" max="8192">
+                            </div>
+                            <div class="config-item">
+                                <label>对话历史长度</label>
+                                <input type="number" id="historyLength" value="10" min="1" max="50">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" id="saveConfigBtn">保存配置</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- 模态框 -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">详情</h3>
+                <button class="modal-close" id="modalClose">×</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer" id="modalFooter"></div>
         </div>
     </div>
+
+    <!-- Toast 通知 -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="app.js"></script>
 </body>
 </html>

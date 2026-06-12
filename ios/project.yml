@@ -23,7 +23,13 @@ targets:
     platform: iOS
     sources:
       - path: PAICC/Sources
+        type: group
+        excludes:
+          - "**/.DS_Store"
       - path: PAICC/Resources
+        type: group
+        excludes:
+          - "**/.DS_Store"
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.evowit.paicc

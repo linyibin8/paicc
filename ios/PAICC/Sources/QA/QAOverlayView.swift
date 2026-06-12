@@ -736,6 +736,4 @@ class QAOverlayView: UIView {
 
 // MARK: - Notification Extension
 
-extension Notification.Name {
-    static let qaStateChanged = Notification.Name("qaStateChanged")
-}
+// 注意: Notification.Name 扩展已在 AppState.swift 中定义

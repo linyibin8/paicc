@@ -1,6 +1,9 @@
-import UIKit
+// MARK: - 导入 UIKit 和 Combine
 
-/// 主视图控制器
+import UIKit
+import Combine
+
+// MARK: - 主视图控制器
 class MainViewController: UIViewController {
 
     // MARK: - UI 组件
@@ -31,6 +34,9 @@ class MainViewController: UIViewController {
     }()
 
     private var qaOverlayView: QAOverlayView?
+
+    // MARK: - Combine
+    private var cancellables = Set<AnyCancellable>()
 
     // MARK: - 生命周期
 
@@ -91,8 +97,6 @@ class MainViewController: UIViewController {
             self?.updateStatusLabel(state)
         }.store(in: &cancellables)
     }
-
-    private var cancellables = Set<AnyCancellable>()
 
     private func updateStatusLabel(_ state: AppState.ScanState) {
         DispatchQueue.main.async {
@@ -156,7 +160,3 @@ class MainViewController: UIViewController {
         // TODO: 显示错题列表
     }
 }
-
-// MARK: - 导入 Combine
-
-import Combine

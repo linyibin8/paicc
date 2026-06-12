@@ -1,7 +1,9 @@
 import Foundation
+import UIKit
 import AVFoundation
 import Speech
 import Vision
+import Combine
 
 /// PAI-CC 全局应用状态管理
 class AppState: NSObject {
@@ -23,7 +25,7 @@ class AppState: NSObject {
 
     // MARK: - 服务
     let cameraService = CameraService()
-    let speechService = VoiceService()
+    let speechService = VoiceService.shared
     let gestureService = GestureService()
     let apiClient = APIClient.shared
     let qaService = QAService()

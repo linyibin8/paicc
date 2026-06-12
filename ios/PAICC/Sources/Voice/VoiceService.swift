@@ -45,10 +45,15 @@ class VoiceService: NSObject {
     private var isTTSPlaying = false
 
     // MARK: - 流式音频播放
-    private var audioPlayer: AVAudioPlayer?
+    private(set) var audioPlayer: AVAudioPlayer?
     private var audioEnginePlayer: AVAudioPlayerNode?
     private var streamingBuffer: AVAudioPCMBuffer?
     private var audioFile: AVAudioFile?
+
+    // 允许扩展访问的内部方法
+    func updateStateInternal(_ newState: VoiceServiceState) {
+        updateState(newState)
+    }
 
     // MARK: - 思考音
     private var thinkingAudioPlayer: AVAudioPlayer?

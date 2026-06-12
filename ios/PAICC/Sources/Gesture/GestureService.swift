@@ -204,6 +204,10 @@ class GestureService {
     }
 }
 
-// MARK: - CaseIterable
+// MARK: - GestureType Extension
 
-extension GestureService.GestureType: CaseIterable {}
+extension GestureService.GestureType: CaseIterable {
+    static var allCases: [GestureService.GestureType] {
+        return [.pointing, .ok, .peace, .raisedHand]
+    }
+}
