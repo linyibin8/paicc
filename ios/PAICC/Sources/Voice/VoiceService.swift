@@ -604,3 +604,21 @@ extension VoiceService: AVAudioPlayerDelegate {
         updateState(.idle)
     }
 }
+// MARK: - 音频文件播放扩展
+
+extension VoiceService {
+
+    /// 从 URL 播放音频文件
+    func playFromURL(_ url: URL) {
+        do {
+            let player = try AVAudioPlayer(contentsOf: url)
+            player.delegate = self
+            player.prepareToPlay()
+            player.play()
+            updateStateInternal(.playing)
+        } catch {
+            print("Failed to play audio from URL: \(error)")
+            speak("音频播放失败")
+        }
+    }
+}

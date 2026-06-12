@@ -256,24 +256,8 @@ class TTSDownloadManager {
     /// 下载并直接播放
     func downloadAndPlay(text: String, voice: String = "zh-CN") async throws {
         let fileURL = try await download(text: text, voice: voice, useCache: true)
-        VoiceService.shared.playAudioFile(at: fileURL)
+        // 使用 VoiceService 的标准播放方法
+        VoiceService.shared.playFromURL(fileURL)
     }
 }
 
-// MARK: - VoiceService 扩展
-
-extension VoiceService {
-
-    /// 播放本地音频文件
-    func playAudioFile(at url: URL) {
-        do {
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer?.delegate = self
-            audioPlayer?.prepareToPlay()
-            audioPlayer?.play()
-            updateStateInternal(.playing)
-        } catch {
-            print("Failed to play audio file: \(error)")
-        }
-    }
-}

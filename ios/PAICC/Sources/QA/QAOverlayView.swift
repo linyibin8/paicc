@@ -12,7 +12,7 @@ class QAOverlayView: UIView {
         return view
     }()
 
-    private lazy var statusIconLabel: UILabel = {
+    lazy var statusIconLabel: UILabel = {
         let label = UILabel()
         label.text = "🔍"
         label.font = .systemFont(ofSize: 32)
@@ -20,7 +20,7 @@ class QAOverlayView: UIView {
         return label
     }()
 
-    private lazy var statusLabel: UILabel = {
+    lazy var statusLabel: UILabel = {
         let label = UILabel()
         label.text = "扫描中..."
         label.textColor = .white
@@ -29,7 +29,7 @@ class QAOverlayView: UIView {
         return label
     }()
 
-    private lazy var answerLabel: UILabel = {
+    lazy var answerLabel: UILabel = {
         let label = UILabel()
         label.text = ""
         label.textColor = .white
@@ -41,34 +41,34 @@ class QAOverlayView: UIView {
     }()
 
     // 思考中动画视图
-    private lazy var thinkingContainerView: UIView = {
+    lazy var thinkingContainerView: UIView = {
         let view = UIView()
         view.isHidden = true
         return view
     }()
 
-    private lazy var thinkingDot1: UIView = {
+    lazy var thinkingDot1: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.white.withAlphaComponent(0.9)
         view.layer.cornerRadius = 5
         return view
     }()
 
-    private lazy var thinkingDot2: UIView = {
+    lazy var thinkingDot2: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.white.withAlphaComponent(0.7)
         view.layer.cornerRadius = 5
         return view
     }()
 
-    private lazy var thinkingDot3: UIView = {
+    lazy var thinkingDot3: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.white.withAlphaComponent(0.5)
         view.layer.cornerRadius = 5
         return view
     }()
 
-    private lazy var hintLabel: UILabel = {
+    lazy var hintLabel: UILabel = {
         let label = UILabel()
         label.text = "👌 打断  |  ✌️ 结束"
         label.textColor = UIColor.white.withAlphaComponent(0.6)
@@ -78,7 +78,7 @@ class QAOverlayView: UIView {
     }()
 
     // 流式文本相关
-    private lazy var streamingCursor: UILabel = {
+    lazy var streamingCursor: UILabel = {
         let label = UILabel()
         label.text = "▋"
         label.textColor = UIColor.white.withAlphaComponent(0.8)
@@ -88,27 +88,27 @@ class QAOverlayView: UIView {
     }()
 
     // 进度条
-    private lazy var progressContainerView: UIView = {
+    lazy var progressContainerView: UIView = {
         let view = UIView()
         view.isHidden = true
         return view
     }()
 
-    private lazy var progressTrackView: UIView = {
+    lazy var progressTrackView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.white.withAlphaComponent(0.2)
         view.layer.cornerRadius = 2
         return view
     }()
 
-    private lazy var progressBarView: UIView = {
+    lazy var progressBarView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.systemBlue
         view.layer.cornerRadius = 2
         return view
     }()
 
-    private lazy var progressTimeLabel: UILabel = {
+    lazy var progressTimeLabel: UILabel = {
         let label = UILabel()
         label.text = "15s"
         label.textColor = UIColor.white.withAlphaComponent(0.7)
@@ -140,7 +140,7 @@ class QAOverlayView: UIView {
     private var streamingTimer: Timer?
     private var streamingText: String = ""
     private var streamingIndex: Int = 0
-    private var typingSpeed: TimeInterval = 0.03 // 打字速度（秒/字）
+    var typingSpeed: TimeInterval = 0.03 // 打字速度（秒/字）
 
     // MARK: - 进度条状态
 
@@ -336,7 +336,7 @@ class QAOverlayView: UIView {
 
     // MARK: - 状态切换动画
 
-    private func animateStateTransition() {
+    func animateStateTransition() {
         // 停止之前的动画
         stopThinkingAnimation()
         stopProgressAnimation()
@@ -360,7 +360,7 @@ class QAOverlayView: UIView {
         }
     }
 
-    private func showIdleState() {
+    func showIdleState() {
         UIView.animate(withDuration: 0.3) {
             self.statusIconLabel.alpha = 1
             self.statusIconLabel.text = "🔍"
@@ -374,7 +374,22 @@ class QAOverlayView: UIView {
         }
     }
 
-    private func showScanningState() {
+    func showInterruptedState() {
+        UIView.animate(withDuration: 0.3) {
+            self.statusIconLabel.alpha = 1
+            self.statusIconLabel.text = "✋"
+            self.statusLabel.text = "已打断，请继续..."
+            self.statusLabel.alpha = 1
+            self.answerLabel.isHidden = true
+            self.streamingCursor.isHidden = true
+            self.thinkingContainerView.isHidden = true
+            self.hintLabel.alpha = 1
+            self.progressContainerView.isHidden = true
+        }
+        stopAllAnimations()
+    }
+
+    func showScanningState() {
         UIView.animate(withDuration: 0.3) {
             self.statusIconLabel.alpha = 1
             self.statusIconLabel.text = "🔍"
@@ -391,7 +406,7 @@ class QAOverlayView: UIView {
         animatePulse(on: statusIconLabel)
     }
 
-    private func showPointingState() {
+    func showPointingState() {
         UIView.animate(withDuration: 0.3) {
             self.statusIconLabel.alpha = 1
             self.statusIconLabel.text = "👆"
@@ -405,7 +420,7 @@ class QAOverlayView: UIView {
         }
     }
 
-    private func showCapturingState() {
+    func showCapturingState() {
         UIView.animate(withDuration: 0.3) {
             self.statusIconLabel.alpha = 1
             self.statusIconLabel.text = "📷"
@@ -419,7 +434,7 @@ class QAOverlayView: UIView {
         }
     }
 
-    private func showListeningState() {
+    func showListeningState() {
         UIView.animate(withDuration: 0.3) {
             self.statusIconLabel.alpha = 1
             self.statusIconLabel.text = "🎤"
@@ -436,7 +451,7 @@ class QAOverlayView: UIView {
         animateBreathing(on: statusIconLabel)
     }
 
-    private func showThinkingState() {
+    func showThinkingState() {
         UIView.animate(withDuration: 0.3) {
             self.statusIconLabel.alpha = 0
             self.statusLabel.text = "思考中..."
@@ -452,7 +467,7 @@ class QAOverlayView: UIView {
         startThinkingAnimation()
     }
 
-    private func showSpeakingState() {
+    func showSpeakingState() {
         UIView.animate(withDuration: 0.3) {
             self.statusIconLabel.alpha = 1
             self.statusIconLabel.text = "🔊"
@@ -478,7 +493,7 @@ class QAOverlayView: UIView {
         animateThinkingDot(thinkingDot3, delay: 0.30)
     }
 
-    private func animateThinkingDot(_ dot: UIView, delay: TimeInterval) {
+    func animateThinkingDot(_ dot: UIView, delay: TimeInterval) {
         UIView.animate(
             withDuration: 0.6,
             delay: delay,
@@ -491,7 +506,7 @@ class QAOverlayView: UIView {
         )
     }
 
-    private func stopThinkingAnimation() {
+    func stopThinkingAnimation() {
         [thinkingDot1, thinkingDot2, thinkingDot3].forEach { dot in
             dot.layer.removeAllAnimations()
             dot.transform = .identity
@@ -501,7 +516,7 @@ class QAOverlayView: UIView {
 
     // MARK: - 脉冲动画
 
-    private func animatePulse(on view: UIView) {
+    func animatePulse(on view: UIView) {
         view.layer.removeAnimation(forKey: "pulse")
 
         let pulse = CABasicAnimation(keyPath: "transform.scale")
@@ -517,7 +532,7 @@ class QAOverlayView: UIView {
 
     // MARK: - 呼吸动画
 
-    private func animateBreathing(on view: UIView) {
+    func animateBreathing(on view: UIView) {
         view.layer.removeAnimation(forKey: "breathing")
 
         let breathing = CABasicAnimation(keyPath: "opacity")
@@ -549,7 +564,7 @@ class QAOverlayView: UIView {
         }
     }
 
-    private func stopProgressAnimation() {
+    func stopProgressAnimation() {
         progressTimer?.invalidate()
         progressTimer = nil
     }
@@ -632,7 +647,7 @@ class QAOverlayView: UIView {
         }
     }
 
-    private func stopTypingAnimation() {
+    func stopTypingAnimation() {
         streamingTimer?.invalidate()
         streamingTimer = nil
         streamingText = ""
@@ -719,7 +734,7 @@ class QAOverlayView: UIView {
     }
 
     /// 停止所有动画
-    private func stopAllAnimations() {
+    func stopAllAnimations() {
         stopTypingAnimation()
         stopProgressAnimation()
         stopThinkingAnimation()

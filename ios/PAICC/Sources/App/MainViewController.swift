@@ -1,9 +1,8 @@
-// MARK: - 导入 UIKit 和 Combine
-
 import UIKit
 import Combine
 
 // MARK: - 主视图控制器
+
 class MainViewController: UIViewController {
 
     // MARK: - UI 组件
@@ -44,16 +43,17 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupCamera()
+        setupQA()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        AppState.shared.startScanning()
+        startScanning()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        AppState.shared.stopScanning()
+        stopScanning()
     }
 
     // MARK: - UI 设置
@@ -88,11 +88,49 @@ class MainViewController: UIViewController {
     }
 
     private func setupCamera() {
-        let previewLayer = AppState.shared.cameraService.previewLayer
-        previewLayer.frame = cameraPreviewView.bounds
-        cameraPreviewView.layer.addSublayer(previewLayer)
+        AppState.shared.setupCamera(in: cameraPreviewView)
+    }
 
-        // 观察状态变化
+    private func setupQA() {
+        // 设置 QA 回调
+        QAService.shared.onStateChanged = { [weak self] state in
+            self?.updateQAState(state)
+        }
+
+        QAService.shared.onPartialAnswer = { [weak self] text in
+            self?.qaOverlayView?.showStreamingAnswer(text)
+        }
+
+        QAService.shared.onAnswerReady = { [weak self] answer, _, _ in
+            self?.qaOverlayView?.finishStreamingAnswer()
+            self?.qaOverlayView?.showAnswer(answer)
+        }
+
+        QAService.shared.onThinkingStarted = { [weak self] in
+            self?.qaOverlayView?.showThinkingState()
+        }
+
+        QAService.shared.onThinkingEnded = { [weak self] in
+            self?.qaOverlayView?.stopThinkingAnimation()
+        }
+
+        QAService.shared.onInterrupted = { [weak self] in
+            self?.qaOverlayView?.showInterruptedState()
+        }
+    }
+
+    // MARK: - 扫描控制
+
+    private func startScanning() {
+        AppState.shared.startScanning()
+        setupStateObserver()
+    }
+
+    private func stopScanning() {
+        AppState.shared.stopScanning()
+    }
+
+    private func setupStateObserver() {
         AppState.shared.$scanState.sink { [weak self] state in
             self?.updateStatusLabel(state)
         }.store(in: &cancellables)
@@ -120,6 +158,36 @@ class MainViewController: UIViewController {
         }
     }
 
+    // MARK: - QA 状态更新
+
+    private func updateQAState(_ state: QAState) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+
+            switch state {
+            case .idle:
+                self.qaOverlayView?.dismiss()
+            case .scanning:
+                self.qaOverlayView?.showScanningState()
+            case .pointing:
+                self.qaOverlayView?.showPointingState()
+            case .capturing:
+                self.qaOverlayView?.showCapturingState()
+            case .listening:
+                self.qaOverlayView?.showListeningState()
+                if self.qaOverlayView?.isHidden == true {
+                    self.qaOverlayView?.show()
+                }
+            case .thinking:
+                self.qaOverlayView?.showThinkingState()
+            case .speaking:
+                self.qaOverlayView?.showSpeakingState()
+            case .interrupted:
+                self.qaOverlayView?.showInterruptedState()
+            }
+        }
+    }
+
     // MARK: - 模式切换
 
     @objc private func modeChanged() {
@@ -138,6 +206,8 @@ class MainViewController: UIViewController {
     private func showScanningMode() {
         qaOverlayView?.removeFromSuperview()
         qaOverlayView = nil
+        stopScanning()
+        startScanning()
     }
 
     private func showQAMode() {
@@ -151,6 +221,12 @@ class MainViewController: UIViewController {
                 qaOverlayView!.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                 qaOverlayView!.bottomAnchor.constraint(equalTo: view.bottomAnchor)
             ])
+        }
+
+        // 在 QA 模式下，自动启动一轮问答
+        if let image = AppState.shared.cameraService.captureCurrentFrame() {
+            QAService.shared.setCurrentImage(image)
+            QAService.shared.startRound()
         }
     }
 

@@ -1,53 +1,8 @@
 import Foundation
 
-// MARK: - WebSocket 消息类型
-
-enum WSMessageType: String, Codable {
-    case start = "start"
-    case partial = "partial"
-    case complete = "complete"
-    case error = "error"
-    case pong = "pong"
-    case interrupt = "interrupt"
-    case thinking = "thinking"
-    case answer = "answer"
-    case ttsStart = "tts_start"
-    case ttsReady = "tts_ready"
-    case ttsError = "tts_error"
-    case historyUpdate = "history_update"
-    case cleared = "cleared"
-    case ping = "ping"
-}
-
-/// WebSocket 消息
-struct WSMessage: Codable {
-    let type: String
-    let content: String?
-    let status: String?
-    let message: String?
-    let error: String?
-    let historyLength: Int?
-    let history: [[String: String]]?
-    let totalCount: Int?
-    let audioUrl: String?
-    let visionUsed: Bool?
-    let knowledgePoints: [String]?
-    let suggestedFollowups: [String]?
-
-    enum CodingKeys: String, CodingKey {
-        case type, content, status, message, error
-        case historyLength = "history_length"
-        case history
-        case totalCount = "total_count"
-        case audioUrl = "audio_url"
-        case visionUsed = "vision_used"
-        case knowledgePoints = "knowledge_points"
-        case suggestedFollowups = "suggested_followups"
-    }
-}
 
 /// WebSocket 连接状态
-enum WSConnectionState {
+enum WSConnectionState: String, Codable {
     case disconnected
     case connecting
     case connected
@@ -93,6 +48,10 @@ protocol QAWebSocketClientDelegate: AnyObject {
     func webSocketDidDisconnect(error: Error?)
     func webSocketDidReceiveMessage(_ message: [String: Any])
     func webSocketDidReceiveError(_ error: String)
+    
+    // 流式响应回调
+    func webSocketDidReceivePartial(_ client: QAWebSocketClient, content: String, isFirst: Bool)
+    func webSocketDidReceiveComplete(_ client: QAWebSocketClient, content: String, knowledgePoints: [String]?, suggestions: [String]?)
 }
 
 /// QA WebSocket 客户端 - 处理流式问答
@@ -453,7 +412,7 @@ class QAWebSocketClient: NSObject {
         guard let data = text.data(using: .utf8) else {
             if !isCancelled {
                 contentBuffer += text
-                delegate?.webSocketDidReceivePartial(text)
+                delegate?.webSocketDidReceivePartial(self, content: text, isFirst: true)
             }
             return
         }
@@ -469,7 +428,7 @@ class QAWebSocketClient: NSObject {
             case "partial":
                 if let content = message.content, !isCancelled {
                     contentBuffer += content
-                    delegate?.webSocketDidReceivePartial(content)
+                    delegate?.webSocketDidReceivePartial(self, content: content, isFirst: false)
                 }
 
             case "complete", "answer":
@@ -544,7 +503,7 @@ class QAWebSocketClient: NSObject {
             // 如果不是标准 JSON，尝试直接作为文本处理
             if !isCancelled {
                 contentBuffer += text
-                delegate?.webSocketDidReceivePartial(text)
+                delegate?.webSocketDidReceivePartial(self, content: text, isFirst: true)
             }
         }
     }
@@ -561,7 +520,7 @@ class QAWebSocketClient: NSObject {
         completionHandler?()
         completionHandler = nil
 
-        delegate?.webSocketDidReceiveComplete(finalContent)
+        delegate?.webSocketDidReceiveComplete(self, content: finalContent, knowledgePoints: nil, suggestions: nil)
 
         pendingQuery = nil
     }

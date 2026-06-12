@@ -7,15 +7,10 @@ struct APIConfig {
     static let ttsURL = "http://paicc.evowit.com:8030"
     static let wsBaseURL = "ws://paicc.evowit.com:8030/api/v1/qa/ws"
 
-    // 本地测试用
+    // 本地测试用 (编译时用 DEBUG 宏控制)
     #if DEBUG
     static let localBaseURL = "http://100.64.0.13:8030/api/v1"
     static let localTTSURL = "http://100.64.0.13:8030"
-    static let wsBaseURL = "ws://100.64.0.13:8030/api/v1/qa/ws"
-    #else
-    static let localBaseURL = "http://paicc.evowit.com:8030/api/v1"
-    static let localTTSURL = "http://paicc.evowit.com:8030"
-    static let wsBaseURL = "ws://paicc.evowit.com:8030/api/v1/qa/ws"
     #endif
 }
 

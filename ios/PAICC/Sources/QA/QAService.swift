@@ -795,3 +795,30 @@ extension QAService: QAWebSocketClientDelegate {
 // MARK: - Notification Extension
 
 // 注意: Notification.Name 扩展已在 AppState.swift 中定义
+// MARK: - 缺失的 delegate 方法
+
+extension QAService {
+    
+    /// 处理部分响应（打字机效果）
+    func webSocketDidReceivePartial(_ client: QAWebSocketClient, content: String, isFirst: Bool) {
+        // 使用现有的流式处理方法
+        handleStreamingPartial(content)
+        
+        // 如果是第一个片段，通知 UI
+        if isFirst {
+            DispatchQueue.main.async {
+                self.state = .thinking
+            }
+        }
+    }
+    
+    /// 处理完整响应
+    func webSocketDidReceiveComplete(_ client: QAWebSocketClient, content: String, knowledgePoints: [String]?, suggestions: [String]?) {
+        // 使用现有的完整处理方法
+        handleStreamingComplete(
+            content,
+            knowledgePoints: knowledgePoints ?? [],
+            suggestedFollowups: suggestions ?? []
+        )
+    }
+}

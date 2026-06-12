@@ -126,22 +126,20 @@ class StreamingResponseHandler: NSObject {
                 // 尝试解析 JSON
                 if let jsonData = jsonString.data(using: .utf8),
                    let message = try? JSONDecoder().decode(WSMessage.self, from: jsonData) {
-                    switch message.type {
-                    case .partial:
+                    let msgType = message.type
+                    if msgType == "partial" || msgType == WSMessageType.partial.rawValue {
                         if let content = message.content {
                             currentContent += content
                             chunks.append(content)
                             onPartialContent?(currentContent)
                         }
-                    case .complete:
+                    } else if msgType == "complete" || msgType == WSMessageType.complete.rawValue {
                         if let content = message.content {
                             currentContent = content
                         }
                         onComplete?(currentContent)
                         cancel()
                         return
-                    default:
-                        break
                     }
                 } else {
                     // 直接作为文本处理
