@@ -52,6 +52,7 @@ class OllamaService:
                     "model": self.model,
                     "messages": messages,
                     "stream": stream,
+                    "no_think": True,  # 禁用思考过程，直接返回答案
                     "options": {
                         "temperature": temperature,
                         "num_predict": max_tokens
@@ -61,7 +62,14 @@ class OllamaService:
             )
 
             if response.status_code == 200:
-                return response.json()
+                result = response.json()
+                # 处理思考模型返回的 reasoning_content
+                if result.get("choices"):
+                    msg = result["choices"][0].get("message", {})
+                    if not msg.get("content") and msg.get("reasoning_content"):
+                        # 将思考内容作为 content 返回
+                        result["choices"][0]["message"]["content"] = msg.get("reasoning_content", "")
+                return result
             else:
                 raise Exception(f"Ollama API error: {response.status_code}")
 
@@ -85,7 +93,8 @@ class OllamaService:
                 json={
                     "model": self.model,
                     "messages": messages,
-                    "stream": True
+                    "stream": True,
+                    "no_think": True  # 禁用思考过程
                 },
                 headers={"Authorization": f"Bearer {self.api_key}"}
             ) as response:
@@ -130,7 +139,11 @@ class OllamaService:
         })
 
         result = await self.chat(messages)
-        return result["choices"][0]["message"]["content"]
+        # 处理思考模型返回
+        content = result["choices"][0]["message"].get("content", "")
+        reasoning = result["choices"][0]["message"].get("reasoning_content", "")
+        # 如果没有 content 但有 reasoning，使用 reasoning
+        return content if content else reasoning
 
     async def extract_learning_items(self, image_base64: str, capture_id: str) -> Dict:
         """
