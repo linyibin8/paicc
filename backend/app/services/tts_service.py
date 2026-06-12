@@ -85,9 +85,9 @@ class TTSService:
         async with httpx.AsyncClient(timeout=self.timeout) as client:
             try:
                 response = await client.post(
-                    f"{self.base_url}/v1/tts",
+                    f"{self.base_url}/v1/audio/speech",
                     json={
-                        "text": text,
+                        "input": text,
                         "model": "kokoro",
                         "voice": voice
                     }
@@ -139,9 +139,9 @@ class TTSService:
         async with httpx.AsyncClient(timeout=self.timeout) as client:
             try:
                 response = await client.post(
-                    f"{self.base_url}/v1/tts",
+                    f"{self.base_url}/v1/audio/speech",
                     json={
-                        "text": text,
+                        "input": text,
                         "model": "kokoro",
                         "voice": voice
                     }
@@ -192,9 +192,9 @@ class TTSService:
             try:
                 async with client.stream(
                     "POST",
-                    f"{self.base_url}/v1/tts",
+                    f"{self.base_url}/v1/audio/speech",
                     json={
-                        "text": text,
+                        "input": text,
                         "model": "kokoro",
                         "voice": voice
                     }
