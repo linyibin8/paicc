@@ -144,36 +144,76 @@ struct TTSResponse: Codable {
 
 // MARK: - WebSocket 消息模型
 
-/// WebSocket 消息类型
+/// WebSocket 消息类型（服务端返回的消息类型）
 enum WSMessageType: String, Codable {
     case start = "start"
     case partial = "partial"
     case complete = "complete"
+    case answer = "answer"
     case error = "error"
-    case ping = "ping"
     case pong = "pong"
+    case interrupt = "interrupt"
+    case interrupted = "interrupted"
+    case thinking = "thinking"
+    case ttsStart = "tts_start"
+    case ttsReady = "tts_ready"
+    case ttsError = "tts_error"
+    case historyUpdate = "history_update"
+    case cleared = "cleared"
+    case ping = "ping"
     case query = "query"
+    case ask = "ask"
     case connect = "connect"
+    case message = "message"
+    case clear = "clear"
+    case getHistory = "get_history"
+    case speak = "speak"
+    case stopTts = "stop_tts"
 }
 
-/// WebSocket 消息
+/// WebSocket 消息（与服务器通信的消息结构）
 struct WSMessage: Codable {
-    let type: WSMessageType
+    let type: String
     let content: String?
-    let sessionId: String?
+    let status: String?
+    let message: String?
+    let error: String?
+    let historyLength: Int?
+    let history: [[String: String]]?
+    let totalCount: Int?
+    let audioUrl: String?
+    let visionUsed: Bool?
+    let knowledgePoints: [String]?
+    let suggestedFollowups: [String]?
+
+    // 请求相关字段
     let query: String?
+    let image: String?
     let imageBase64: String?
+    let enableTts: Bool?
+    let voice: String?
+    let conversationHistory: [[String: String]]?
+    let sessionId: String?
     let client: String?
     let version: String?
+    let text: String?
 
     enum CodingKeys: String, CodingKey {
-        case type
-        case content
-        case sessionId = "session_id"
-        case query
+        case type, content, status, message, error
+        case historyLength = "history_length"
+        case history
+        case totalCount = "total_count"
+        case audioUrl = "audio_url"
+        case visionUsed = "vision_used"
+        case knowledgePoints = "knowledge_points"
+        case suggestedFollowups = "suggested_followups"
+        case query, image
         case imageBase64 = "image_base64"
-        case client
-        case version
+        case enableTts = "enable_tts"
+        case voice
+        case conversationHistory = "conversation_history"
+        case sessionId = "session_id"
+        case client, version, text
     }
 }
 
