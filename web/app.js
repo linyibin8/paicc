@@ -1,7 +1,7 @@
 // PAI-CC 管理后台 JavaScript
 
 // 配置
-const API_BASE = 'http://100.64.0.13:8090/api/v1';
+const API_BASE = 'http://100.64.0.13:8030/api/v1';
 
 // 状态
 let currentPage = 'dashboard';

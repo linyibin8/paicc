@@ -7,9 +7,9 @@ struct APIConfig {
 
     // 本地测试用
     #if DEBUG
-    static let localBaseURL = "http://100.64.0.13:8090/api/v1"
-    static let localTTSURL = "http://100.64.0.13:8090"
-    static let wsBaseURL = "ws://100.64.0.13:8090/api/v1/qa/ws"
+    static let localBaseURL = "http://100.64.0.13:8030/api/v1"
+    static let localTTSURL = "http://100.64.0.13:8030"
+    static let wsBaseURL = "ws://100.64.0.13:8030/api/v1/qa/ws"
     #else
     static let localBaseURL = ""
     static let localTTSURL = ""

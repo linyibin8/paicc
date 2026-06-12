@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     ollama_model: str = "evowit-agent27b"
 
     # TTS (Kokoro)
-    tts_base_url: str = "http://100.64.0.13:8880"
+    tts_base_url: str = "http://127.0.0.1:8880"
 
     # JWT
     secret_key: str = "pai-cc-secret-key-change-in-production"
