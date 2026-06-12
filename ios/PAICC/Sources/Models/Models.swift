@@ -2,8 +2,10 @@ import Foundation
 
 /// API 配置
 struct APIConfig {
-    static let baseURL = "http://api.pai-cc.evowit.com/api/v1"
-    static let ttsURL = "http://tts.pai-cc.evowit.com/api/v1"
+    // 生产环境 - 腾讯云服务器
+    static let baseURL = "http://paicc.evowit.com:8030/api/v1"
+    static let ttsURL = "http://paicc.evowit.com:8030"
+    static let wsBaseURL = "ws://paicc.evowit.com:8030/api/v1/qa/ws"
 
     // 本地测试用
     #if DEBUG
@@ -11,9 +13,9 @@ struct APIConfig {
     static let localTTSURL = "http://100.64.0.13:8030"
     static let wsBaseURL = "ws://100.64.0.13:8030/api/v1/qa/ws"
     #else
-    static let localBaseURL = ""
-    static let localTTSURL = ""
-    static let wsBaseURL = "wss://api.pai-cc.evowit.com/api/v1/qa/ws"
+    static let localBaseURL = "http://paicc.evowit.com:8030/api/v1"
+    static let localTTSURL = "http://paicc.evowit.com:8030"
+    static let wsBaseURL = "ws://paicc.evowit.com:8030/api/v1/qa/ws"
     #endif
 }
 
@@ -257,3 +259,4 @@ struct TTSDownloadResponse: Codable {
         case fileSize = "file_size"
     }
 }
+
