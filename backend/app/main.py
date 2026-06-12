@@ -28,6 +28,11 @@ app.add_middleware(
 os.makedirs(settings.upload_dir, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=settings.upload_dir), name="uploads")
 
+# Web Dashboard 静态文件
+web_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "web")
+if os.path.exists(web_dir):
+    app.mount("/web", StaticFiles(directory=web_dir, html=True), name="web")
+
 # 注册路由
 app.include_router(captures.router, prefix="/api/v1/captures", tags=["采集"])
 app.include_router(sessions.router, prefix="/api/v1/sessions", tags=["会话"])

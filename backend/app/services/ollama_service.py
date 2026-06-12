@@ -66,8 +66,8 @@ class OllamaService:
                 # 处理思考模型返回的 reasoning_content
                 if result.get("choices"):
                     msg = result["choices"][0].get("message", {})
-                    if not msg.get("content") and msg.get("reasoning_content"):
-                        # 将思考内容作为 content 返回
+                    # content 为空时使用 reasoning_content
+                    if not msg.get("content"):
                         result["choices"][0]["message"]["content"] = msg.get("reasoning_content", "")
                 return result
             else:
@@ -105,9 +105,13 @@ class OllamaService:
                             break
                         try:
                             chunk = json.loads(data_str)
+                            # 思考模型返回的 reasoning_content
                             content = chunk["choices"][0]["delta"].get("content", "")
-                            if content:
-                                yield content
+                            reasoning = chunk["choices"][0]["delta"].get("reasoning_content", "")
+                            # 如果 content 为空但有 reasoning，使用 reasoning
+                            output = content if content else reasoning
+                            if output:
+                                yield output
                         except:
                             continue
 
