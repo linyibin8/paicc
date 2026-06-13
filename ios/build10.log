@@ -1,0 +1,444 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -project PAICC.xcodeproj -scheme PAICC -configuration Debug -destination "generic/platform=iOS Simulator" build
+
+Resolve Package Graph
+
+
+Resolved source packages:
+  SnapKit: https://github.com/SnapKit/SnapKit.git @ 5.7.1
+  Alamofire: https://github.com/Alamofire/Alamofire.git @ 5.12.0
+
+2026-06-12 11:56:49.830 xcodebuild[94248:5574946] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (1 target)
+    Target 'PAICC' in project 'PAICC' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /Users/macstar/Projects/PAICC/PAICC/Resources/Assets.xcassets
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/ibtool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: a1fb98dee9121de82ebe4f0d74571fa1
+Build description path: /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/XCBuildData/a1fb98dee9121de82ebe4f0d74571fa1.xcbuilddata
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk /Users/macstar/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.5-23F73-6cfe768891a92b912361537c460fe42b.sdkstatcache
+    cd /Users/macstar/Projects/PAICC/PAICC.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -o /Users/macstar/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.5-23F73-6cfe768891a92b912361537c460fe42b.sdkstatcache
+
+ProcessInfoPlistFile /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app/Info.plist /Users/macstar/Projects/PAICC/PAICC/Sources/App/Info.plist (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    builtin-infoPlistUtility /Users/macstar/Projects/PAICC/PAICC/Sources/App/Info.plist -producttype com.apple.product-type.application -genpkginfo /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app/PkgInfo -expandbuildsettings -format binary -platform iphonesimulator -additionalcontentfile /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/LaunchScreen-SBPartialInfo.plist -additionalcontentfile /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/assetcatalog_generated_info.plist -o /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app/Info.plist
+
+SwiftDriver PAICC normal arm64 com.apple.xcode.tools.swift.compiler (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name PAICC -O @/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC.SwiftFileList -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -target arm64-apple-ios16.0-simulator -g -module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -swift-version 5 -I /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator -F /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator -emit-localized-strings -emit-localized-strings-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64 -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/macstar/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.5-23F73-6cfe768891a92b912361537c460fe42b.sdkstatcache -output-file-map /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC_const_extract_protocols.json -Xcc -iquote -Xcc /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-generated-files.hmap -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-own-target-headers.hmap -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-all-target-headers.hmap -Xcc -iquote -Xcc /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-project-headers.hmap -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/DerivedSources-normal/arm64 -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/DerivedSources/arm64 -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/DerivedSources -emit-objc-header -emit-objc-header-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC-Swift.h -working-directory /Users/macstar/Projects/PAICC -experimental-emit-module-separately -disable-cmo
+
+SwiftDriver PAICC normal x86_64 com.apple.xcode.tools.swift.compiler (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name PAICC -O @/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC.SwiftFileList -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -target x86_64-apple-ios16.0-simulator -g -module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -swift-version 5 -I /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator -F /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator -emit-localized-strings -emit-localized-strings-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64 -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/macstar/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.5-23F73-6cfe768891a92b912361537c460fe42b.sdkstatcache -output-file-map /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC_const_extract_protocols.json -Xcc -iquote -Xcc /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-generated-files.hmap -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-own-target-headers.hmap -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-all-target-headers.hmap -Xcc -iquote -Xcc /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-project-headers.hmap -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/DerivedSources-normal/x86_64 -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/DerivedSources/x86_64 -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/DerivedSources -emit-objc-header -emit-objc-header-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC-Swift.h -working-directory /Users/macstar/Projects/PAICC -experimental-emit-module-separately -disable-cmo
+
+SwiftCompile normal x86_64 Compiling\ GestureService.swift,\ MainViewController.swift,\ Models.swift /Users/macstar/Projects/PAICC/PAICC/Sources/Gesture/GestureService.swift /Users/macstar/Projects/PAICC/PAICC/Sources/App/MainViewController.swift /Users/macstar/Projects/PAICC/PAICC/Sources/Models/Models.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftCompile normal x86_64 /Users/macstar/Projects/PAICC/PAICC/Sources/Gesture/GestureService.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+/Users/macstar/Projects/PAICC/PAICC/Sources/Gesture/GestureService.swift:161:13: warning: initialization of immutable value 'extendedCount' was never used; consider replacing with assignment to '_' or removing it
+        let extendedCount = [GestureType.pointing, .ok, .peace]
+        ~~~~^~~~~~~~~~~~~
+        _
+
+SwiftCompile normal x86_64 /Users/macstar/Projects/PAICC/PAICC/Sources/App/MainViewController.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftCompile normal x86_64 /Users/macstar/Projects/PAICC/PAICC/Sources/Models/Models.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftEmitModule normal x86_64 Emitting\ module\ for\ PAICC (in target 'PAICC' from project 'PAICC')
+
+EmitSwiftModule normal x86_64 (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftCompile normal x86_64 Compiling\ SessionManager.swift,\ StreamingResponseHandler.swift /Users/macstar/Projects/PAICC/PAICC/Sources/API/SessionManager.swift /Users/macstar/Projects/PAICC/PAICC/Sources/API/StreamingResponseHandler.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftCompile normal x86_64 /Users/macstar/Projects/PAICC/PAICC/Sources/API/SessionManager.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftCompile normal x86_64 /Users/macstar/Projects/PAICC/PAICC/Sources/API/StreamingResponseHandler.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+/Users/macstar/Projects/PAICC/PAICC/Sources/API/StreamingResponseHandler.swift:169:13: warning: initialization of immutable value 'result' was never used; consider replacing with assignment to '_' or removing it
+        let result = StreamingResult(
+        ~~~~^~~~~~
+        _
+
+SwiftCompile normal x86_64 Compiling\ APIClient.swift,\ APIModule.swift,\ AppDelegate.swift /Users/macstar/Projects/PAICC/PAICC/Sources/API/APIClient.swift /Users/macstar/Projects/PAICC/PAICC/Sources/API/APIModule.swift /Users/macstar/Projects/PAICC/PAICC/Sources/App/AppDelegate.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftCompile normal x86_64 /Users/macstar/Projects/PAICC/PAICC/Sources/API/APIClient.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftCompile normal x86_64 /Users/macstar/Projects/PAICC/PAICC/Sources/API/APIModule.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftCompile normal x86_64 /Users/macstar/Projects/PAICC/PAICC/Sources/App/AppDelegate.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftCompile normal x86_64 Compiling\ AppState.swift,\ CameraService.swift,\ CaptureService.swift /Users/macstar/Projects/PAICC/PAICC/Sources/App/AppState.swift /Users/macstar/Projects/PAICC/PAICC/Sources/Scanning/CameraService.swift /Users/macstar/Projects/PAICC/PAICC/Sources/Scanning/CaptureService.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftCompile normal x86_64 /Users/macstar/Projects/PAICC/PAICC/Sources/App/AppState.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftCompile normal x86_64 /Users/macstar/Projects/PAICC/PAICC/Sources/Scanning/CameraService.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftCompile normal x86_64 /Users/macstar/Projects/PAICC/PAICC/Sources/Scanning/CaptureService.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftCompile normal x86_64 Compiling\ TTSDownloadManager.swift,\ VoiceService+Usage.swift /Users/macstar/Projects/PAICC/PAICC/Sources/API/TTSDownloadManager.swift /Users/macstar/Projects/PAICC/PAICC/Sources/Voice/VoiceService+Usage.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftCompile normal x86_64 /Users/macstar/Projects/PAICC/PAICC/Sources/API/TTSDownloadManager.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+/Users/macstar/Projects/PAICC/PAICC/Sources/API/TTSDownloadManager.swift:207:17: warning: capture of 'self' with non-Sendable type 'TTSDownloadManager?' in a '@Sendable' closure
+                self?.activeTasks.removeValue(forKey: key)
+                ^
+/Users/macstar/Projects/PAICC/PAICC/Sources/API/TTSDownloadManager.swift:14:7: note: class 'TTSDownloadManager' does not conform to the 'Sendable' protocol
+class TTSDownloadManager {
+      ^
+
+SwiftCompile normal x86_64 /Users/macstar/Projects/PAICC/PAICC/Sources/Voice/VoiceService+Usage.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+/Users/macstar/Projects/PAICC/PAICC/Sources/API/TTSDownloadManager.swift:207:17: warning: capture of 'self' with non-Sendable type 'TTSDownloadManager?' in a '@Sendable' closure
+                self?.activeTasks.removeValue(forKey: key)
+                ^
+/Users/macstar/Projects/PAICC/PAICC/Sources/API/TTSDownloadManager.swift:14:7: note: class 'TTSDownloadManager' does not conform to the 'Sendable' protocol
+class TTSDownloadManager {
+      ^
+
+SwiftCompile normal x86_64 Compiling\ VoiceService.swift,\ GeneratedAssetSymbols.swift /Users/macstar/Projects/PAICC/PAICC/Sources/Voice/VoiceService.swift /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftCompile normal x86_64 /Users/macstar/Projects/PAICC/PAICC/Sources/Voice/VoiceService.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+/Users/macstar/Projects/PAICC/PAICC/Sources/Voice/VoiceService.swift:82:104: warning: 'allowBluetooth' was deprecated in iOS 8.0: renamed to 'AVAudioSession.CategoryOptions.allowBluetoothHFP'
+            try audioSession.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth, .mixWithOthers])
+                                                                                                       ^
+/Users/macstar/Projects/PAICC/PAICC/Sources/Voice/VoiceService.swift:82:104: note: use 'AVAudioSession.CategoryOptions.allowBluetoothHFP' instead
+            try audioSession.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth, .mixWithOthers])
+                                                                                                       ^~~~~~~~~~~~~~
+                                                                                                       AVAudioSession.CategoryOptions.allowBluetoothHFP
+
+SwiftCompile normal x86_64 /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ PAICC (in target 'PAICC' from project 'PAICC')
+
+EmitSwiftModule normal arm64 (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftCompile normal arm64 Compiling\ TTSDownloadManager.swift,\ VoiceService+Usage.swift /Users/macstar/Projects/PAICC/PAICC/Sources/API/TTSDownloadManager.swift /Users/macstar/Projects/PAICC/PAICC/Sources/Voice/VoiceService+Usage.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftCompile normal arm64 /Users/macstar/Projects/PAICC/PAICC/Sources/API/TTSDownloadManager.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+/Users/macstar/Projects/PAICC/PAICC/Sources/API/TTSDownloadManager.swift:207:17: warning: capture of 'self' with non-Sendable type 'TTSDownloadManager?' in a '@Sendable' closure
+                self?.activeTasks.removeValue(forKey: key)
+                ^
+/Users/macstar/Projects/PAICC/PAICC/Sources/API/TTSDownloadManager.swift:14:7: note: class 'TTSDownloadManager' does not conform to the 'Sendable' protocol
+class TTSDownloadManager {
+      ^
+
+SwiftCompile normal arm64 /Users/macstar/Projects/PAICC/PAICC/Sources/Voice/VoiceService+Usage.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+/Users/macstar/Projects/PAICC/PAICC/Sources/API/TTSDownloadManager.swift:207:17: warning: capture of 'self' with non-Sendable type 'TTSDownloadManager?' in a '@Sendable' closure
+                self?.activeTasks.removeValue(forKey: key)
+                ^
+/Users/macstar/Projects/PAICC/PAICC/Sources/API/TTSDownloadManager.swift:14:7: note: class 'TTSDownloadManager' does not conform to the 'Sendable' protocol
+class TTSDownloadManager {
+      ^
+
+SwiftDriverJobDiscovery normal x86_64 Emitting module for PAICC (in target 'PAICC' from project 'PAICC')
+
+SwiftDriver\ Compilation\ Requirements PAICC normal x86_64 com.apple.xcode.tools.swift.compiler (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name PAICC -O @/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC.SwiftFileList -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -target x86_64-apple-ios16.0-simulator -g -module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -swift-version 5 -I /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator -F /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator -emit-localized-strings -emit-localized-strings-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64 -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/macstar/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.5-23F73-6cfe768891a92b912361537c460fe42b.sdkstatcache -output-file-map /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC_const_extract_protocols.json -Xcc -iquote -Xcc /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-generated-files.hmap -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-own-target-headers.hmap -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-all-target-headers.hmap -Xcc -iquote -Xcc /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-project-headers.hmap -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/DerivedSources-normal/x86_64 -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/DerivedSources/x86_64 -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/DerivedSources -emit-objc-header -emit-objc-header-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC-Swift.h -working-directory /Users/macstar/Projects/PAICC -experimental-emit-module-separately -disable-cmo
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for PAICC (in target 'PAICC' from project 'PAICC')
+
+SwiftDriver\ Compilation\ Requirements PAICC normal arm64 com.apple.xcode.tools.swift.compiler (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name PAICC -O @/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC.SwiftFileList -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -target arm64-apple-ios16.0-simulator -g -module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -swift-version 5 -I /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator -F /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator -emit-localized-strings -emit-localized-strings-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64 -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/macstar/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.5-23F73-6cfe768891a92b912361537c460fe42b.sdkstatcache -output-file-map /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC_const_extract_protocols.json -Xcc -iquote -Xcc /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-generated-files.hmap -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-own-target-headers.hmap -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-all-target-headers.hmap -Xcc -iquote -Xcc /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-project-headers.hmap -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/DerivedSources-normal/arm64 -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/DerivedSources/arm64 -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/DerivedSources -emit-objc-header -emit-objc-header-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC-Swift.h -working-directory /Users/macstar/Projects/PAICC -experimental-emit-module-separately -disable-cmo
+
+SwiftCompile normal arm64 Compiling\ AppState.swift,\ CameraService.swift,\ CaptureService.swift /Users/macstar/Projects/PAICC/PAICC/Sources/App/AppState.swift /Users/macstar/Projects/PAICC/PAICC/Sources/Scanning/CameraService.swift /Users/macstar/Projects/PAICC/PAICC/Sources/Scanning/CaptureService.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftCompile normal arm64 /Users/macstar/Projects/PAICC/PAICC/Sources/App/AppState.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftCompile normal arm64 /Users/macstar/Projects/PAICC/PAICC/Sources/Scanning/CameraService.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftCompile normal arm64 /Users/macstar/Projects/PAICC/PAICC/Sources/Scanning/CaptureService.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+Copy /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.swiftmodule/x86_64-apple-ios-simulator.abi.json /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC.abi.json (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC.abi.json /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.swiftmodule/x86_64-apple-ios-simulator.abi.json
+
+SwiftDriverJobDiscovery normal x86_64 Compiling SessionManager.swift, StreamingResponseHandler.swift (in target 'PAICC' from project 'PAICC')
+
+Copy /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.swiftmodule/arm64-apple-ios-simulator.abi.json /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC.abi.json (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC.abi.json /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.swiftmodule/arm64-apple-ios-simulator.abi.json
+
+Copy /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.swiftmodule/Project/x86_64-apple-ios-simulator.swiftsourceinfo /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC.swiftsourceinfo (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC.swiftsourceinfo /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.swiftmodule/Project/x86_64-apple-ios-simulator.swiftsourceinfo
+
+Copy /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.swiftmodule/Project/arm64-apple-ios-simulator.swiftsourceinfo /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC.swiftsourceinfo (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC.swiftsourceinfo /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.swiftmodule/Project/arm64-apple-ios-simulator.swiftsourceinfo
+
+SwiftCompile normal arm64 Compiling\ SessionManager.swift,\ StreamingResponseHandler.swift /Users/macstar/Projects/PAICC/PAICC/Sources/API/SessionManager.swift /Users/macstar/Projects/PAICC/PAICC/Sources/API/StreamingResponseHandler.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftCompile normal arm64 /Users/macstar/Projects/PAICC/PAICC/Sources/API/SessionManager.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftCompile normal arm64 /Users/macstar/Projects/PAICC/PAICC/Sources/API/StreamingResponseHandler.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+/Users/macstar/Projects/PAICC/PAICC/Sources/API/StreamingResponseHandler.swift:169:13: warning: initialization of immutable value 'result' was never used; consider replacing with assignment to '_' or removing it
+        let result = StreamingResult(
+        ~~~~^~~~~~
+        _
+
+SwiftDriverJobDiscovery normal x86_64 Compiling AppState.swift, CameraService.swift, CaptureService.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftCompile normal arm64 Compiling\ GestureService.swift,\ MainViewController.swift,\ Models.swift /Users/macstar/Projects/PAICC/PAICC/Sources/Gesture/GestureService.swift /Users/macstar/Projects/PAICC/PAICC/Sources/App/MainViewController.swift /Users/macstar/Projects/PAICC/PAICC/Sources/Models/Models.swift (in target 'PAICC' from project 'PAICC')
+SwiftCompile normal arm64 /Users/macstar/Projects/PAICC/PAICC/Sources/Gesture/GestureService.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+/Users/macstar/Projects/PAICC/PAICC/Sources/Gesture/GestureService.swift:161:13: warning: initialization of immutable value 'extendedCount' was never used; consider replacing with assignment to '_' or removing it
+        let extendedCount = [GestureType.pointing, .ok, .peace]
+        ~~~~^~~~~~~~~~~~~
+        _
+
+SwiftCompile normal arm64 /Users/macstar/Projects/PAICC/PAICC/Sources/App/MainViewController.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftCompile normal arm64 /Users/macstar/Projects/PAICC/PAICC/Sources/Models/Models.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftCompile normal arm64 Compiling\ APIClient.swift,\ APIModule.swift,\ AppDelegate.swift /Users/macstar/Projects/PAICC/PAICC/Sources/API/APIClient.swift /Users/macstar/Projects/PAICC/PAICC/Sources/API/APIModule.swift /Users/macstar/Projects/PAICC/PAICC/Sources/App/AppDelegate.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftCompile normal arm64 /Users/macstar/Projects/PAICC/PAICC/Sources/API/APIClient.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftCompile normal arm64 /Users/macstar/Projects/PAICC/PAICC/Sources/API/APIModule.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftCompile normal arm64 /Users/macstar/Projects/PAICC/PAICC/Sources/App/AppDelegate.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftDriverJobDiscovery normal x86_64 Compiling APIClient.swift, APIModule.swift, AppDelegate.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftCompile normal arm64 Compiling\ VoiceService.swift,\ GeneratedAssetSymbols.swift /Users/macstar/Projects/PAICC/PAICC/Sources/Voice/VoiceService.swift /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftCompile normal arm64 /Users/macstar/Projects/PAICC/PAICC/Sources/Voice/VoiceService.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+/Users/macstar/Projects/PAICC/PAICC/Sources/Voice/VoiceService.swift:82:104: warning: 'allowBluetooth' was deprecated in iOS 8.0: renamed to 'AVAudioSession.CategoryOptions.allowBluetoothHFP'
+            try audioSession.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth, .mixWithOthers])
+                                                                                                       ^
+/Users/macstar/Projects/PAICC/PAICC/Sources/Voice/VoiceService.swift:82:104: note: use 'AVAudioSession.CategoryOptions.allowBluetoothHFP' instead
+            try audioSession.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth, .mixWithOthers])
+                                                                                                       ^~~~~~~~~~~~~~
+                                                                                                       AVAudioSession.CategoryOptions.allowBluetoothHFP
+
+SwiftCompile normal arm64 /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftDriverJobDiscovery normal x86_64 Compiling TTSDownloadManager.swift, VoiceService+Usage.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftCompile normal arm64 Compiling\ QAOverlayView.swift,\ QAService.swift /Users/macstar/Projects/PAICC/PAICC/Sources/QA/QAOverlayView.swift /Users/macstar/Projects/PAICC/PAICC/Sources/QA/QAService.swift (in target 'PAICC' from project 'PAICC')
+SwiftCompile normal arm64 /Users/macstar/Projects/PAICC/PAICC/Sources/QA/QAOverlayView.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+/Users/macstar/Projects/PAICC/PAICC/Sources/QA/QAOverlayView.swift:625:21: warning: initialization of immutable value 'index' was never used; consider replacing with assignment to '_' or removing it
+                let index = self.streamingText.index(self.streamingText.startIndex, offsetBy: self.streamingIndex)
+                ~~~~^~~~~
+                _
+
+SwiftCompile normal arm64 /Users/macstar/Projects/PAICC/PAICC/Sources/QA/QAService.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+/Users/macstar/Projects/PAICC/PAICC/Sources/QA/QAService.swift:306:20: warning: capture of 'self' with non-Sendable type 'QAService?' in a '@Sendable' closure
+                if self?.isStreamingResponse == true {
+                   ^
+/Users/macstar/Projects/PAICC/PAICC/Sources/QA/QAService.swift:72:7: note: class 'QAService' does not conform to the 'Sendable' protocol
+class QAService: NSObject {
+      ^
+
+SwiftDriverJobDiscovery normal x86_64 Compiling VoiceService.swift, GeneratedAssetSymbols.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftCompile normal x86_64 Compiling\ QAOverlayView.swift,\ QAService.swift /Users/macstar/Projects/PAICC/PAICC/Sources/QA/QAOverlayView.swift /Users/macstar/Projects/PAICC/PAICC/Sources/QA/QAService.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftCompile normal x86_64 /Users/macstar/Projects/PAICC/PAICC/Sources/QA/QAOverlayView.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+/Users/macstar/Projects/PAICC/PAICC/Sources/QA/QAOverlayView.swift:625:21: warning: initialization of immutable value 'index' was never used; consider replacing with assignment to '_' or removing it
+                let index = self.streamingText.index(self.streamingText.startIndex, offsetBy: self.streamingIndex)
+                ~~~~^~~~~
+                _
+
+SwiftCompile normal x86_64 /Users/macstar/Projects/PAICC/PAICC/Sources/QA/QAService.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+/Users/macstar/Projects/PAICC/PAICC/Sources/QA/QAService.swift:306:20: warning: capture of 'self' with non-Sendable type 'QAService?' in a '@Sendable' closure
+                if self?.isStreamingResponse == true {
+                   ^
+/Users/macstar/Projects/PAICC/PAICC/Sources/QA/QAService.swift:72:7: note: class 'QAService' does not conform to the 'Sendable' protocol
+class QAService: NSObject {
+      ^
+
+SwiftDriverJobDiscovery normal arm64 Compiling SessionManager.swift, StreamingResponseHandler.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftCompile normal x86_64 Compiling\ QAWebSocketClient.swift,\ SceneDelegate.swift /Users/macstar/Projects/PAICC/PAICC/Sources/QA/QAWebSocketClient.swift /Users/macstar/Projects/PAICC/PAICC/Sources/App/SceneDelegate.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftCompile normal x86_64 /Users/macstar/Projects/PAICC/PAICC/Sources/QA/QAWebSocketClient.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftCompile normal x86_64 /Users/macstar/Projects/PAICC/PAICC/Sources/App/SceneDelegate.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling AppState.swift, CameraService.swift, CaptureService.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftCompile normal arm64 Compiling\ QAWebSocketClient.swift,\ SceneDelegate.swift /Users/macstar/Projects/PAICC/PAICC/Sources/QA/QAWebSocketClient.swift /Users/macstar/Projects/PAICC/PAICC/Sources/App/SceneDelegate.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftCompile normal arm64 /Users/macstar/Projects/PAICC/PAICC/Sources/QA/QAWebSocketClient.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftCompile normal arm64 /Users/macstar/Projects/PAICC/PAICC/Sources/App/SceneDelegate.swift (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling TTSDownloadManager.swift, VoiceService+Usage.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftDriverJobDiscovery normal x86_64 Compiling GestureService.swift, MainViewController.swift, Models.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftDriverJobDiscovery normal arm64 Compiling APIClient.swift, APIModule.swift, AppDelegate.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftDriverJobDiscovery normal arm64 Compiling VoiceService.swift, GeneratedAssetSymbols.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftDriverJobDiscovery normal x86_64 Compiling QAWebSocketClient.swift, SceneDelegate.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftDriverJobDiscovery normal arm64 Compiling QAWebSocketClient.swift, SceneDelegate.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftDriverJobDiscovery normal arm64 Compiling GestureService.swift, MainViewController.swift, Models.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftDriverJobDiscovery normal x86_64 Compiling QAOverlayView.swift, QAService.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftDriver\ Compilation PAICC normal x86_64 com.apple.xcode.tools.swift.compiler (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name PAICC -O @/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC.SwiftFileList -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -target x86_64-apple-ios16.0-simulator -g -module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -swift-version 5 -I /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator -F /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator -emit-localized-strings -emit-localized-strings-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64 -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/macstar/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.5-23F73-6cfe768891a92b912361537c460fe42b.sdkstatcache -output-file-map /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC_const_extract_protocols.json -Xcc -iquote -Xcc /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-generated-files.hmap -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-own-target-headers.hmap -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-all-target-headers.hmap -Xcc -iquote -Xcc /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-project-headers.hmap -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/DerivedSources-normal/x86_64 -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/DerivedSources/x86_64 -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/DerivedSources -emit-objc-header -emit-objc-header-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC-Swift.h -working-directory /Users/macstar/Projects/PAICC -experimental-emit-module-separately -disable-cmo
+
+Ld /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/Binary/PAICC normal x86_64 (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target x86_64-apple-ios16.0-simulator -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -Os -L/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -L/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator -F/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -F/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator -filelist /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC.LinkFileList -Xlinker -rpath -Xlinker /usr/lib/swift -Xlinker -rpath -Xlinker @executable_path/Frameworks -Xlinker -dead_strip -Xlinker -object_path_lto -Xlinker /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC_lto.o -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -dependency_info -Xlinker /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC.swiftmodule @/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC-linker-args.resp -o /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/Binary/PAICC
+
+SwiftDriverJobDiscovery normal arm64 Compiling QAOverlayView.swift, QAService.swift (in target 'PAICC' from project 'PAICC')
+
+SwiftDriver\ Compilation PAICC normal arm64 com.apple.xcode.tools.swift.compiler (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name PAICC -O @/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC.SwiftFileList -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -target arm64-apple-ios16.0-simulator -g -module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -swift-version 5 -I /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator -F /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator -emit-localized-strings -emit-localized-strings-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64 -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/macstar/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.5-23F73-6cfe768891a92b912361537c460fe42b.sdkstatcache -output-file-map /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/macstar/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC_const_extract_protocols.json -Xcc -iquote -Xcc /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-generated-files.hmap -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-own-target-headers.hmap -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-all-target-headers.hmap -Xcc -iquote -Xcc /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC-project-headers.hmap -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/DerivedSources-normal/arm64 -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/DerivedSources/arm64 -Xcc -I/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/DerivedSources -emit-objc-header -emit-objc-header-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC-Swift.h -working-directory /Users/macstar/Projects/PAICC -experimental-emit-module-separately -disable-cmo
+
+Ld /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/Binary/PAICC normal arm64 (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios16.0-simulator -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -Os -L/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -L/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator -F/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -F/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator -filelist /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC.LinkFileList -Xlinker -rpath -Xlinker /usr/lib/swift -Xlinker -rpath -Xlinker @executable_path/Frameworks -Xlinker -dead_strip -Xlinker -object_path_lto -Xlinker /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC_lto.o -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -dependency_info -Xlinker /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC.swiftmodule @/Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC-linker-args.resp -o /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/Binary/PAICC
+
+CreateUniversalBinary /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app/PAICC normal arm64\ x86_64 (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo -create /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/Binary/PAICC /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/Binary/PAICC -output /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app/PAICC
+
+ExtractAppIntentsMetadata (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name PAICC --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk --xcode-version 17F42 --platform-family iOS --deployment-target 16.0 --bundle-identifier com.evowit.paicc --output /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app --target-triple arm64-apple-ios16.0-simulator --target-triple x86_64-apple-ios16.0-simulator --binary-file /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app/PAICC --dependency-file /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC_dependency_info.dat --dependency-file /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC_dependency_info.dat --stringsdata-file /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --stringsdata-file /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC.SwiftFileList --source-file-list /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC.SwiftFileList --metadata-file-list /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC.DependencyMetadataFileList --static-metadata-file-list /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC.DependencyStaticMetadataFileList --swift-const-vals-list /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/arm64/PAICC.SwiftConstValuesFileList --swift-const-vals-list /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/Objects-normal/x86_64/PAICC.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
+2026-06-12 11:56:56.131 appintentsmetadataprocessor[94316:5575353] Starting appintentsmetadataprocessor export
+2026-06-12 11:56:56.136 appintentsmetadataprocessor[94316:5575353] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
+
+CopySwiftLibs /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    builtin-swiftStdLibTool --copy --verbose --scan-executable /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app/PAICC --scan-folder /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app/Frameworks --scan-folder /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app/PlugIns --scan-folder /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app/SystemExtensions --scan-folder /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app/Extensions --platform iphonesimulator --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os --back-deploy-swift-span
+Ignoring --strip-bitcode because --sign was not passed
+
+GenerateDSYMFile /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app.dSYM /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app/PAICC (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/dsymutil /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app/PAICC -o /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app.dSYM
+
+AppIntentsSSUTraining (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsnltrainingprocessor --infoplist-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app/Info.plist --temp-dir-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/ssu --bundle-id com.evowit.paicc --product-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app --extracted-metadata-path /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app/Metadata.appintents --metadata-file-list /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Intermediates.noindex/PAICC.build/Debug-iphonesimulator/PAICC.build/PAICC.DependencyMetadataFileList --source-file /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app/Info.plist --archive-ssu-assets
+2026-06-12 11:56:56.158 appintentsnltrainingprocessor[94318:5575355] Parsing options for appintentsnltrainingprocessor
+2026-06-12 11:56:56.158 appintentsnltrainingprocessor[94318:5575355] Starting AppIntents SSU YAML Generation
+2026-06-12 11:56:56.160 appintentsnltrainingprocessor[94318:5575355] No AppShortcuts found - Skipping.
+
+RegisterExecutionPolicyException /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    builtin-RegisterExecutionPolicyException /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app
+
+Validate /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    builtin-validationUtility /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app -shallow-bundle -infoplist-subpath Info.plist
+
+Touch /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app (in target 'PAICC' from project 'PAICC')
+    cd /Users/macstar/Projects/PAICC
+    /usr/bin/touch -c /Users/macstar/Library/Developer/Xcode/DerivedData/PAICC-cjafooojxckgcgbuogcgqvbacpkr/Build/Products/Debug-iphonesimulator/PAICC.app
+
+** BUILD SUCCEEDED **
+
