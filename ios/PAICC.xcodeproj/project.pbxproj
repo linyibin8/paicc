@@ -272,8 +272,9 @@
 		6462442AA276D6E8477AB261 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "Apple Distribution: Shenzhen Youdezhe Technology Co., Ltd. (N3G45G5H74)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				DEVELOPMENT_TEAM = N3G45G5H74;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = N3G45G5H74;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -326,8 +327,9 @@
 		EFEDA9A7E93D1ED6E1F35BD9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "Apple Distribution: Shenzhen Youdezhe Technology Co., Ltd. (N3G45G5H74)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				DEVELOPMENT_TEAM = N3G45G5H74;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = N3G45G5H74;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;

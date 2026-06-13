@@ -10,12 +10,12 @@ options:
 
 settings:
   base:
-    MARKETING_VERSION: "1.0.0"
-    CURRENT_PROJECT_VERSION: "202606130336"
+    MARKETING_VERSION: "1.0.1"
+    CURRENT_PROJECT_VERSION: "202606131800"
     SWIFT_VERSION: "5.0"
     DEVELOPMENT_TEAM: "N3G45G5H74"
-    CODE_SIGN_STYLE: Manual
-    CODE_SIGN_IDENTITY: "Apple Distribution: Shenzhen Youdezhe Technology Co., Ltd. (N3G45G5H74)"
+    CODE_SIGN_STYLE: Automatic
+    CODE_SIGN_IDENTITY: "-"
 
 targets:
   PAICC:
@@ -42,7 +42,11 @@ targets:
         SWIFT_EMIT_LOC_STRINGS: YES
         GENERATE_INFOPLIST_FILE: NO
         ALWAYS_SEARCH_USER_PATHS: NO
-        DEVELOPMENT_TEAM: "N3G45G5H74"
+        DEVELOPMENT_TEAM: N3G45G5H74
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_IDENTITY: "Apple Distribution: Shenzhen Youdezhe Technology Co., Ltd. (N3G45G5H74)"
+        CODE_SIGNING_ALLOWED: YES
+        CODE_SIGNING_REQUIRED: YES
 
 packages:
   SnapKit:
