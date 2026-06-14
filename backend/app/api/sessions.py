@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 import uuid
 
 from app.models.database import get_db
-from app.models.models import Session as SessionModel, Capture, LearningItem
+from app.models.models import Session as SessionModel, Capture, LearningItem, Student
 
 router = APIRouter()
 
@@ -90,11 +90,18 @@ class SessionResponse(BaseModel):
     created_at: datetime
 
 
-def _session_to_response(session: SessionModel) -> SessionResponse:
+def _session_to_response(session: SessionModel, db: Session = None) -> SessionResponse:
     """将数据库模型转换为响应模型"""
+    # 获取学生的字符串 ID
+    student_id_str = str(session.student_id)
+    if db and session.student_id:
+        student = db.query(Student).filter(Student.id == session.student_id).first()
+        if student:
+            student_id_str = student.student_id
+
     return SessionResponse(
         session_id=session.session_id,
-        student_id=session.student_id,
+        student_id=student_id_str,
         status=session.status,
         student_goal=session.student_goal,
         assistant_focus=session.assistant_focus,
@@ -120,6 +127,14 @@ async def create_session(data: SessionCreate, db: Session = Depends(get_db)):
     """创建新的学习会话"""
     session_id = f"sess_{uuid.uuid4().hex[:12]}"
 
+    # 查找或创建学生
+    student = db.query(Student).filter(Student.student_id == data.student_id).first()
+    if not student:
+        student = Student(student_id=data.student_id)
+        db.add(student)
+        db.commit()
+        db.refresh(student)
+
     # 初始化会话历史
     initial_history = [
         {
@@ -132,7 +147,7 @@ async def create_session(data: SessionCreate, db: Session = Depends(get_db)):
 
     session = SessionModel(
         session_id=session_id,
-        student_id=data.student_id,
+        student_id=student.id,
         student_goal=data.student_goal,
         assistant_focus=data.assistant_focus,
         report_style=data.report_style,
@@ -145,7 +160,7 @@ async def create_session(data: SessionCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(session)
 
-    return _session_to_response(session)
+    return _session_to_response(session, db)
 
 
 @router.get("/{session_id}", response_model=SessionResponse)
@@ -158,7 +173,7 @@ async def get_session(session_id: str, db: Session = Depends(get_db)):
     if not session:
         raise HTTPException(status_code=404, detail="Session not found")
 
-    return _session_to_response(session)
+    return _session_to_response(session, db)
 
 
 @router.put("/{session_id}", response_model=SessionResponse)
@@ -225,7 +240,7 @@ async def update_session(
     db.commit()
     db.refresh(session)
 
-    return _session_to_response(session)
+    return _session_to_response(session, db)
 
 
 @router.post("/{session_id}/end")

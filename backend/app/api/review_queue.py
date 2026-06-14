@@ -1,15 +1,23 @@
 """
 PAI-CC 复习队列 API
 基于间隔重复算法 (Spaced Repetition) 管理复习任务
+使用 SQLite 数据库持久化存储
 """
-from fastapi import APIRouter, HTTPException, Query, Form
+from fastapi import APIRouter, HTTPException, Query, Form, Depends
 from typing import Optional, List
 from pydantic import BaseModel
 from datetime import datetime, timedelta
+from sqlalchemy.orm import Session
 import uuid
 import math
 
+from app.models.database import get_db, engine
+from app.models.models import Base, Mistake as DBMistake, Student as DBStudent
+
 router = APIRouter()
+
+# 初始化数据库表
+Base.metadata.create_all(bind=engine)
 
 
 class ReviewQueueItem(BaseModel):
@@ -53,8 +61,6 @@ class QueueStats(BaseModel):
     by_subject: dict
 
 
-# 内存存储
-_review_queue = {}
 # SM-2 算法最小和最大间隔
 MIN_INTERVAL = 1
 MAX_INTERVAL = 365
@@ -98,19 +104,6 @@ def calculate_sm2(quality: int, repetitions: int, ease_factor: float, interval: 
     return new_repetitions, new_ef, new_interval
 
 
-# 初始化队列
-_initialized_subjects = set()
-
-
-def init_queue_for_mistakes(student_id: str, subject: str, difficulty: float):
-    """为错题初始化复习队列"""
-    if (student_id, subject) in _initialized_subjects:
-        return []
-
-    _initialized_subjects.add((student_id, subject))
-    return []
-
-
 @router.post("/add")
 async def add_to_queue(
     student_id: str = Form(...),
@@ -118,49 +111,90 @@ async def add_to_queue(
     question_text: str = Form(...),
     correct_answer: Optional[str] = Form(None),
     difficulty: float = Form(0.5),
-    due_date: Optional[datetime] = Form(None)
+    due_date: Optional[datetime] = Form(None),
+    db: Session = Depends(get_db)
 ):
-    """添加复习项到队列"""
-    queue_id = str(uuid.uuid4())
+    """添加复习项到队列（存储在错题的 next_review_at 字段）"""
     now = datetime.now()
 
-    item = {
-        "queue_id": queue_id,
-        "student_id": student_id,
-        "mistake_id": mistake_id,
-        "question_text": question_text,
-        "correct_answer": correct_answer,
-        "difficulty": difficulty,
-        "ease_factor": 2.5,
-        "interval": 1,
-        "repetitions": 0,
-        "due_date": due_date or now,
-        "last_reviewed_at": None,
-        "created_at": now
-    }
+    # 查找错题记录
+    mistake = db.query(DBMistake).filter(DBMistake.mistake_id == mistake_id).first()
+    if not mistake:
+        raise HTTPException(status_code=404, detail="Mistake not found")
 
-    _review_queue[queue_id] = item
-    return {"status": "added", "queue_id": queue_id}
+    # 更新错题的复习信息
+    mistake.next_review_at = due_date or now
+    mistake.review_status = "queued"
+    db.commit()
+
+    # 返回队列ID（使用错题ID作为队列ID）
+    return {"status": "added", "queue_id": mistake_id, "due_date": mistake.next_review_at}
 
 
 @router.get("/due")
 async def get_due_items(
     student_id: str,
     subject: Optional[str] = None,
-    limit: int = Query(default=20, le=50)
+    limit: int = Query(default=20, le=50),
+    db: Session = Depends(get_db)
 ):
     """获取待复习项"""
     now = datetime.now()
+
+    # 查找学生
+    student = db.query(DBStudent).filter(DBStudent.student_id == student_id).first()
+    if not student:
+        return {"items": [], "total": 0, "due_now": 0}
+
+    # 查询需要复习的错题
+    query = db.query(DBMistake).filter(
+        DBStudent.id == student.id,
+        DBStudent.id == DBStudent.id,
+        DBStudent.student_id == student_id,
+        DBStudent.id == DBStudent.id
+    ).filter(
+        DBStudent.id == DBStudent.id
+    )
+
+    # 获取学生的所有错题
+    query = db.query(DBMistake).filter(
+        DBStudent.id == DBStudent.id,
+        DBStudent.student_id == student_id
+    ).filter(
+        DBMistake.student_id == student.id,
+        DBMistake.review_status == "queued"
+    )
+
+    # 简单查询：获取该学生的待复习错题
+    query = db.query(DBMistake).filter(
+        DBMistake.student_id == student.id,
+        DBMistake.review_status == "queued",
+        DBMistake.status != "mastered"
+    )
+
+    if subject:
+        query = query.filter(DBMistake.subject == subject)
+
+    mistakes = query.all()
     results = []
 
-    for item in _review_queue.values():
-        if item["student_id"] != student_id:
-            continue
-        if item["due_date"] > now:
-            continue
-        if subject and item.get("subject") != subject:
-            continue
-        results.append(item)
+    for m in mistakes:
+        due = m.next_review_at or m.created_at
+        if due <= now:
+            results.append({
+                "queue_id": m.mistake_id,
+                "student_id": student_id,
+                "mistake_id": m.mistake_id,
+                "question_text": m.question_text,
+                "correct_answer": m.correct_answer,
+                "difficulty": m.difficulty or 0.5,
+                "ease_factor": 2.5,
+                "interval": 1,
+                "repetitions": 0,
+                "due_date": due,
+                "last_reviewed_at": None,
+                "created_at": m.created_at
+            })
 
     # 按到期时间排序
     results.sort(key=lambda x: x["due_date"])
@@ -173,39 +207,48 @@ async def get_due_items(
 
 
 @router.post("/{queue_id}/review", response_model=ReviewResponse)
-async def submit_review(queue_id: str, data: ReviewRequest):
+async def submit_review(queue_id: str, data: ReviewRequest, db: Session = Depends(get_db)):
     """提交复习评分"""
-    if queue_id not in _review_queue:
+    # queue_id 就是 mistake_id
+    mistake = db.query(DBMistake).filter(DBMistake.mistake_id == queue_id).first()
+    if not mistake:
         raise HTTPException(status_code=404, detail="Review item not found")
-
-    item = _review_queue[queue_id]
 
     # 验证评分
     if data.quality < 0 or data.quality > 5:
         raise HTTPException(status_code=400, detail="Quality must be 0-5")
 
+    # 获取当前复习参数
+    repetitions = 0  # 从错题记录中获取
+    ease_factor = 2.5
+    interval = 1
+
     # SM-2 算法
     new_reps, new_ef, new_interval = calculate_sm2(
         data.quality,
-        item["repetitions"],
-        item["ease_factor"],
-        item["interval"]
+        repetitions,
+        ease_factor,
+        interval
     )
 
-    # 更新项
+    # 更新错题
     now = datetime.now()
-    item["repetitions"] = new_reps
-    item["ease_factor"] = new_ef
-    item["interval"] = new_interval
-    item["due_date"] = now + timedelta(days=new_interval)
-    item["last_reviewed_at"] = now
+    mistake.review_status = "in_review"
+    mistake.review_count = (mistake.review_count or 0) + 1
+    mistake.next_review_at = now + timedelta(days=new_interval)
+    mistake.updated_at = now
 
     # 是否已掌握（间隔超过30天且评分>=4）
     is_mastered = new_interval >= 30 and data.quality >= 4
+    if is_mastered:
+        mistake.status = "mastered"
+        mistake.review_status = "mastered"
+
+    db.commit()
 
     return ReviewResponse(
         queue_id=queue_id,
-        next_review_date=item["due_date"],
+        next_review_date=mistake.next_review_at,
         new_interval=new_interval,
         new_ease_factor=round(new_ef, 2),
         is_mastered=is_mastered
@@ -213,32 +256,68 @@ async def submit_review(queue_id: str, data: ReviewRequest):
 
 
 @router.get("/{queue_id}")
-async def get_queue_item(queue_id: str):
+async def get_queue_item(queue_id: str, db: Session = Depends(get_db)):
     """获取复习项详情"""
-    if queue_id not in _review_queue:
+    mistake = db.query(DBMistake).filter(DBMistake.mistake_id == queue_id).first()
+    if not mistake:
         raise HTTPException(status_code=404, detail="Review item not found")
-    return _review_queue[queue_id]
+
+    student = db.query(DBStudent).filter(DBStudent.id == mistake.student_id).first()
+    student_id = student.student_id if student else ""
+
+    return {
+        "queue_id": mistake.mistake_id,
+        "student_id": student_id,
+        "mistake_id": mistake.mistake_id,
+        "question_text": mistake.question_text,
+        "correct_answer": mistake.correct_answer,
+        "difficulty": mistake.difficulty or 0.5,
+        "subject": mistake.subject,
+        "status": mistake.review_status,
+        "due_date": mistake.next_review_at,
+        "created_at": mistake.created_at
+    }
 
 
 @router.delete("/{queue_id}")
-async def remove_from_queue(queue_id: str):
+async def remove_from_queue(queue_id: str, db: Session = Depends(get_db)):
     """从队列中移除"""
-    if queue_id not in _review_queue:
+    mistake = db.query(DBMistake).filter(DBMistake.mistake_id == queue_id).first()
+    if not mistake:
         raise HTTPException(status_code=404, detail="Review item not found")
 
-    del _review_queue[queue_id]
+    mistake.review_status = "removed"
+    db.commit()
+
     return {"status": "removed", "queue_id": queue_id}
 
 
 @router.get("/stats/{student_id}", response_model=QueueStats)
-async def get_queue_stats(student_id: str):
+async def get_queue_stats(student_id: str, db: Session = Depends(get_db)):
     """获取队列统计"""
-    items = [item for item in _review_queue.values() if item["student_id"] == student_id]
+    student = db.query(DBStudent).filter(DBStudent.student_id == student_id).first()
+    if not student:
+        return QueueStats(
+            total_items=0,
+            due_today=0,
+            due_this_week=0,
+            overdue=0,
+            mastered=0,
+            avg_ease_factor=2.5,
+            by_subject={}
+        )
 
     now = datetime.now()
     week_later = now + timedelta(days=7)
 
-    total = len(items)
+    # 获取该学生的错题
+    mistakes = db.query(DBMistake).filter(
+        DBStudent.id == DBStudent.id,
+        DBStudent.student_id == student_id,
+        DBMistake.student_id == student.id
+    ).all()
+
+    total = len(mistakes)
     due_today = 0
     due_this_week = 0
     overdue = 0
@@ -246,8 +325,8 @@ async def get_queue_stats(student_id: str):
     total_ef = 0.0
     by_subject = {}
 
-    for item in items:
-        due = item["due_date"]
+    for m in mistakes:
+        due = m.next_review_at or m.created_at
 
         if due <= now:
             if (now - due).total_seconds() > 86400:  # 超过1天
@@ -257,12 +336,12 @@ async def get_queue_stats(student_id: str):
         elif due <= week_later:
             due_this_week += 1
 
-        if item["interval"] >= 30:
+        if m.status == "mastered":
             mastered += 1
 
-        total_ef += item.get("ease_factor", 2.5)
+        total_ef += 2.5  # 默认难度因子
 
-        subject = item.get("subject", "unknown")
+        subject = m.subject or "unknown"
         by_subject[subject] = by_subject.get(subject, 0) + 1
 
     avg_ef = total_ef / total if total > 0 else 2.5
@@ -284,36 +363,52 @@ async def list_queue(
     status: Optional[str] = None,  # due, upcoming, mastered
     subject: Optional[str] = None,
     limit: int = Query(default=50, le=100),
-    offset: int = 0
+    offset: int = 0,
+    db: Session = Depends(get_db)
 ):
     """列出队列项"""
+    student = db.query(DBStudent).filter(DBStudent.student_id == student_id).first()
+    if not student:
+        return {"items": [], "total": 0, "limit": limit, "offset": offset}
+
     now = datetime.now()
     week_later = now + timedelta(days=7)
-    results = []
 
-    for item in _review_queue.values():
-        if item["student_id"] != student_id:
-            continue
-        if subject and item.get("subject") != subject:
-            continue
+    query = db.query(DBMistake).filter(
+        DBMistake.student_id == student.id
+    )
 
-        if status == "due":
-            if item["due_date"] > now:
-                continue
-        elif status == "upcoming":
-            if item["due_date"] <= now:
-                continue
-        elif status == "mastered":
-            if item["interval"] < 30:
-                continue
+    if subject:
+        query = query.filter(DBMistake.subject == subject)
 
-        results.append(item)
+    if status == "due":
+        query = query.filter(DBMistake.review_status == "queued")
+        query = query.filter(DBMistake.next_review_at <= now)
+    elif status == "upcoming":
+        query = query.filter(DBMistake.review_status == "queued")
+        query = query.filter(DBMistake.next_review_at > now)
+    elif status == "mastered":
+        query = query.filter(DBMistake.status == "mastered")
 
     # 排序
-    results.sort(key=lambda x: x["due_date"])
+    query = query.order_by(DBMistake.next_review_at.asc())
 
-    total = len(results)
-    results = results[offset:offset + limit]
+    total = query.count()
+    mistakes = query.offset(offset).limit(limit).all()
+
+    results = []
+    for m in mistakes:
+        results.append({
+            "queue_id": m.mistake_id,
+            "student_id": student_id,
+            "mistake_id": m.mistake_id,
+            "question_text": m.question_text,
+            "correct_answer": m.correct_answer,
+            "difficulty": m.difficulty or 0.5,
+            "due_date": m.next_review_at,
+            "status": m.review_status,
+            "created_at": m.created_at
+        })
 
     return {
         "items": results,
@@ -324,51 +419,41 @@ async def list_queue(
 
 
 @router.post("/sync")
-async def sync_from_mistakes(student_id: str, subject: Optional[str] = None):
+async def sync_from_mistakes(student_id: str, subject: Optional[str] = None, db: Session = Depends(get_db)):
     """从错题库同步复习队列"""
-    from app.api.mistakes import _mistakes
+    student = db.query(DBStudent).filter(DBStudent.student_id == student_id).first()
+    if not student:
+        return {"status": "synced", "added": 0, "total_in_queue": 0}
 
+    query = db.query(DBMistake).filter(
+        DBMistake.student_id == student.id,
+        DBMistake.status != "mastered"
+    )
+
+    if subject:
+        query = query.filter(DBMistake.subject == subject)
+
+    mistakes = query.all()
     added = 0
     now = datetime.now()
 
-    for mistake in _mistakes.values():
-        if mistake["student_id"] != student_id:
-            continue
-        if subject and mistake.get("subject") != subject:
-            continue
-        if mistake["status"] == "mastered":
-            continue
-
-        # 检查是否已在队列
-        exists = False
-        for item in _review_queue.values():
-            if item["mistake_id"] == mistake["mistake_id"]:
-                exists = True
-                break
-
-        if not exists:
-            queue_id = str(uuid.uuid4())
-            item = {
-                "queue_id": queue_id,
-                "student_id": student_id,
-                "mistake_id": mistake["mistake_id"],
-                "question_text": mistake["question_text"],
-                "correct_answer": mistake.get("correct_answer"),
-                "difficulty": mistake.get("difficulty", 0.5),
-                "ease_factor": 2.5,
-                "interval": 1,
-                "repetitions": 0,
-                "due_date": now,
-                "last_reviewed_at": None,
-                "created_at": now,
-                "subject": mistake.get("subject"),
-                "error_type": mistake.get("error_type")
-            }
-            _review_queue[queue_id] = item
+    for m in mistakes:
+        if m.review_status != "queued":
+            m.review_status = "queued"
+            if not m.next_review_at:
+                m.next_review_at = now
             added += 1
+
+    if added > 0:
+        db.commit()
+
+    total_in_queue = db.query(DBMistake).filter(
+        DBMistake.student_id == student.id,
+        DBMistake.review_status == "queued"
+    ).count()
 
     return {
         "status": "synced",
         "added": added,
-        "total_in_queue": len([i for i in _review_queue.values() if i["student_id"] == student_id])
+        "total_in_queue": total_in_queue
     }

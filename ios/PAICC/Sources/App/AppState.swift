@@ -1,163 +1,123 @@
 import Foundation
-import UIKit
-import AVFoundation
-import Speech
-import Vision
-import Combine
 
-/// PAI-CC 全局应用状态管理
-class AppState: NSObject {
+class AppState {
     static let shared = AppState()
 
-    // MARK: - 状态
-    enum ScanState {
-        case idle
-        case scanning
-        case capturing
-        case analyzing
-        case qaActive
+    private let defaults = UserDefaults.standard
+
+    // MARK: - Keys
+    private enum Keys {
+        static let studentId = "student_id"
+        static let isLoggedIn = "is_logged_in"
+        static let studentName = "student_name"
+        static let lastSessionId = "last_session_id"
+        static let serverHost = "server_host"
+        static let serverPort = "server_port"
+        static let autoTTS = "auto_tts"
+        static let gestureEnabled = "gesture_enabled"
+        static let thinkingSoundEnabled = "thinking_sound_enabled"
     }
 
-    @Published var scanState: ScanState = .idle
-    @Published var currentSessionId: String?
-    @Published var lastCaptureTime: Date?
-    @Published var studentPresent: Bool = false
-
-    // MARK: - 服务
-    let cameraService = CameraService()
-    let speechService = VoiceService.shared
-    let qaService = QAService()
-
-    private override init() {
-        super.init()
-        setupCameraCallbacks()
-        setupQACallbacks()
+    // MARK: - Server Configuration
+    var serverHost: String {
+        get { defaults.string(forKey: Keys.serverHost) ?? "paicc.evowit.com" }
+        set { defaults.set(newValue, forKey: Keys.serverHost) }
     }
 
-    // MARK: - 相机设置
-
-    func setupCamera(in view: UIView) {
-        cameraService.setupCamera(in: view)
+    var serverPort: Int {
+        get { defaults.integer(forKey: Keys.serverPort) != 0 ? defaults.integer(forKey: Keys.serverPort) : 8030 }
+        set { defaults.set(newValue, forKey: Keys.serverPort) }
     }
 
-    // MARK: - 扫描控制
-
-    func startScanning() {
-        guard scanState == .idle else { return }
-        scanState = .scanning
-        cameraService.startCapture()
-        cameraService.enableGestureDetection()
+    var baseURL: String {
+        return "http://\(serverHost):\(serverPort)"
     }
 
-    func stopScanning() {
-        cameraService.disableGestureDetection()
-        cameraService.stopCapture()
-        speechService.stopListening()
-        scanState = .idle
-    }
-
-    // MARK: - 会话管理
-
-    func createSession(studentGoal: String? = nil) async throws -> String {
-        let sessionId = try await APIClient.shared.createSession(studentGoal: studentGoal)
-        currentSessionId = sessionId
-        qaService.setCurrentSession(sessionId)
-        return sessionId
-    }
-
-    func endSession() async throws {
-        guard let sessionId = currentSessionId else { return }
-        try await APIClient.shared.endSession(sessionId: sessionId)
-        currentSessionId = nil
-    }
-
-    // MARK: - 相机回调设置
-
-    private func setupCameraCallbacks() {
-        cameraService.onGestureDetected = { [weak self] gesture in
-            self?.handleGestureDetected(gesture)
-        }
-
-        cameraService.onFrameCaptured = { [weak self] image in
-            self?.qaService.setCurrentImage(image)
-        }
-    }
-
-    // MARK: - QA 回调设置
-
-    private func setupQACallbacks() {
-        qaService.onStateChanged = { [weak self] state in
-            DispatchQueue.main.async {
-                switch state {
-                case .scanning, .listening:
-                    self?.scanState = .scanning
-                case .capturing, .thinking, .speaking:
-                    self?.scanState = .qaActive
-                case .pointing:
-                    self?.scanState = .capturing
-                case .interrupted:
-                    self?.scanState = .scanning
-                case .idle:
-                    self?.scanState = .idle
-                }
+    // MARK: - User State
+    var studentId: String {
+        get {
+            if let id = defaults.string(forKey: Keys.studentId), !id.isEmpty {
+                return id
             }
+            // 生成新的匿名 ID
+            let newId = "student_\(UUID().uuidString.prefix(8))"
+            defaults.set(newId, forKey: Keys.studentId)
+            return newId
         }
-
-        qaService.onThinkingStarted = { [weak self] in
-            // 播放思考音
-            self?.speechService.playThinkingSound()
-        }
-
-        qaService.onAnswerReady = { [weak self] answer, _, _ in
-            // 答案准备好的回调（已在 QAService 中处理 TTS）
-            _ = answer
-            _ = self
-        }
+        set { defaults.set(newValue, forKey: Keys.studentId) }
     }
 
-    // MARK: - 手势处理
+    var studentName: String {
+        get { defaults.string(forKey: Keys.studentName) ?? "" }
+        set { defaults.set(newValue, forKey: Keys.studentName) }
+    }
 
-    private func handleGestureDetected(_ gesture: GestureType) {
-        switch gesture {
-        case .pointing:
-            // 指向手势 - 截取当前帧并开始问答
-            scanState = .capturing
-            if let image = cameraService.captureCurrentFrame() {
-                qaService.setCurrentImage(image)
-                // 启动问答流程
-                qaService.startRound()
+    var isLoggedIn: Bool {
+        get { defaults.bool(forKey: Keys.isLoggedIn) }
+        set { defaults.set(newValue, forKey: Keys.isLoggedIn) }
+    }
+
+    var lastSessionId: String? {
+        get { defaults.string(forKey: Keys.lastSessionId) }
+        set { defaults.set(newValue, forKey: Keys.lastSessionId) }
+    }
+
+    // MARK: - Settings
+    var autoTTSEnabled: Bool {
+        get { defaults.bool(forKey: Keys.autoTTS) }
+        set { defaults.set(newValue, forKey: Keys.autoTTS) }
+    }
+
+    var gestureEnabled: Bool {
+        get {
+            if defaults.object(forKey: Keys.gestureEnabled) == nil {
+                return true // 默认开启
             }
+            return defaults.bool(forKey: Keys.gestureEnabled)
+        }
+        set { defaults.set(newValue, forKey: Keys.gestureEnabled) }
+    }
 
-        case .ok:
-            // OK 手势 - 打断当前问答
-            qaService.interrupt()
+    var thinkingSoundEnabled: Bool {
+        get {
+            if defaults.object(forKey: Keys.thinkingSoundEnabled) == nil {
+                return true // 默认开启
+            }
+            return defaults.bool(forKey: Keys.thinkingSoundEnabled)
+        }
+        set { defaults.set(newValue, forKey: Keys.thinkingSoundEnabled) }
+    }
 
-        case .peace:
-            // ✌️ 手势 - 结束本轮问答
-            qaService.endRound()
-
-        case .raisedHand:
-            // 举手 - 记录学生存在
-            studentPresent = true
+    // MARK: - Initialization
+    private init() {
+        // 设置默认值
+        if defaults.object(forKey: Keys.autoTTS) == nil {
+            defaults.set(true, forKey: Keys.autoTTS)
+        }
+        if defaults.object(forKey: Keys.gestureEnabled) == nil {
+            defaults.set(true, forKey: Keys.gestureEnabled)
+        }
+        if defaults.object(forKey: Keys.thinkingSoundEnabled) == nil {
+            defaults.set(true, forKey: Keys.thinkingSoundEnabled)
         }
     }
 
-    // MARK: - 清理
-
-    func cleanup() {
-        stopScanning()
-        qaService.endRound()
+    // MARK: - Login
+    func login(name: String) {
+        studentName = name
+        isLoggedIn = true
     }
 
-    deinit {
-        cleanup()
+    func logout() {
+        studentName = ""
+        isLoggedIn = false
+        lastSessionId = nil
     }
-}
 
-// MARK: - 通知名称
-
-extension Notification.Name {
-    static let gestureDetected = Notification.Name("gestureDetected")
-    static let speechResult = Notification.Name("speechResult")
-    static let qaStateChanged = Notification.Name("qaStateChanged")
+    // MARK: - Reset
+    func resetAllSettings() {
+        let domain = Bundle.main.bundleIdentifier!
+        defaults.removePersistentDomain(forName: domain)
+        defaults.synchronize()
+    }
 }

@@ -198,6 +198,46 @@ class APIClient {
         return try JSONDecoder().decode([Mistake].self, from: data)
     }
 
+    // MARK: - 会话详情
+
+    func getSession(sessionId: String) async throws -> SessionDetail {
+        let data = try await get("\(baseURL)/sessions/\(sessionId)")
+        return try JSONDecoder().decode(SessionDetail.self, from: data)
+    }
+
+    // MARK: - 错题管理
+
+    func getMistakes(sessionId: String) async throws -> [MistakeItem] {
+        let data = try await get("\(baseURL)/mistakes?session_id=\(sessionId)")
+        return try JSONDecoder().decode([MistakeItem].self, from: data)
+    }
+
+    func updateMistake(mistakeId: String, status: String) async throws {
+        let body: [String: Any] = ["status": status]
+        _ = try await patch("\(baseURL)/mistakes/\(mistakeId)", body: body)
+    }
+
+    // MARK: - TTS 语音合成
+
+    func synthesizeSpeech(text: String) async throws -> URL {
+        let body: [String: Any] = ["text": text]
+        let data = try await post("\(baseURL)/tts/synthesize", body: body)
+
+        struct TTSResponse: Codable {
+            let audioUrl: String
+
+            enum CodingKeys: String, CodingKey {
+                case audioUrl = "audio_url"
+            }
+        }
+
+        let response = try JSONDecoder().decode(TTSResponse.self, from: data)
+        guard let url = URL(string: response.audioUrl) else {
+            throw APIError.invalidURL
+        }
+        return url
+    }
+
     // MARK: - 私有方法
 
     private func get(_ urlString: String) async throws -> Data {
@@ -257,6 +297,26 @@ class APIClient {
 
         return data
     }
+
+    private func patch(_ urlString: String, body: [String: Any]) async throws -> Data {
+        guard let url = URL(string: urlString) else {
+            throw APIError.invalidURL
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "PATCH"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+
+        let (data, response) = try await session.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw APIError.serverError
+        }
+
+        return data
+    }
 }
 
 // MARK: - 响应模型
@@ -268,6 +328,32 @@ struct CreateSessionResponse: Codable {
         case sessionId = "session_id"
     }
 }
+
+struct SessionDetail: Codable {
+    let sessionId: String
+    let summary: String?
+    let learningItems: [LearningItem]?
+    let mistakeItems: [MistakeItem]?
+    let startTime: String?
+    let endTime: String?
+
+    enum CodingKeys: String, CodingKey {
+        case sessionId = "session_id"
+        case summary
+        case learningItems = "learning_items"
+        case mistakeItems = "mistake_items"
+        case startTime = "start_time"
+        case endTime = "end_time"
+    }
+}
+
+struct LearningItem: Codable {
+    let id: String
+    let content: String?
+    let type: String?
+}
+
+// MARK: - API 扩展方法
 
 // MARK: - 错误
 

@@ -2,15 +2,16 @@ import Foundation
 
 /// API 配置
 struct APIConfig {
-    // 生产环境 - 腾讯云服务器
-    static let baseURL = "http://paicc.evowit.com:8030/api/v1"
-    static let ttsURL = "http://paicc.evowit.com:8030"
-    static let wsBaseURL = "ws://paicc.evowit.com:8030/api/v1/qa/ws"
+    // 生产环境 - 腾讯云服务器 (域名)
+    static let baseURL = "http://paicc.evowit.com:8027/api"
+    static let ttsURL = "http://paicc.evowit.com:8027"
+    static let wsBaseURL = "ws://paicc.evowit.com:8027/api/qa/ws"
 
     // 本地测试用 (编译时用 DEBUG 宏控制)
     #if DEBUG
-    static let localBaseURL = "http://100.64.0.13:8030/api/v1"
-    static let localTTSURL = "http://100.64.0.13:8030"
+    static let localBaseURL = "http://100.64.0.13:8027/api"
+    static let localTTSURL = "http://100.64.0.13:8027"
+    static let wsBaseURL = "ws://100.64.0.13:8027/api/qa/ws"
     #endif
 }
 

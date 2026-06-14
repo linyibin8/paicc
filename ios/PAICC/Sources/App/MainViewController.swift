@@ -1,5 +1,6 @@
 import UIKit
 import Combine
+import AudioToolbox
 
 // MARK: - 主视图控制器
 
@@ -93,28 +94,28 @@ class MainViewController: UIViewController {
 
     private func setupQA() {
         // 设置 QA 回调
-        QAService.shared.onStateChanged = { [weak self] state in
+        AppState.shared.qaService.onStateChanged = { [weak self] state in
             self?.updateQAState(state)
         }
 
-        QAService.shared.onPartialAnswer = { [weak self] text in
+        AppState.shared.qaService.onPartialAnswer = { [weak self] text in
             self?.qaOverlayView?.showStreamingAnswer(text)
         }
 
-        QAService.shared.onAnswerReady = { [weak self] answer, _, _ in
+        AppState.shared.qaService.onAnswerReady = { [weak self] answer, _, _ in
             self?.qaOverlayView?.finishStreamingAnswer()
             self?.qaOverlayView?.showAnswer(answer)
         }
 
-        QAService.shared.onThinkingStarted = { [weak self] in
+        AppState.shared.qaService.onThinkingStarted = { [weak self] in
             self?.qaOverlayView?.showThinkingState()
         }
 
-        QAService.shared.onThinkingEnded = { [weak self] in
+        AppState.shared.qaService.onThinkingEnded = { [weak self] in
             self?.qaOverlayView?.stopThinkingAnimation()
         }
 
-        QAService.shared.onInterrupted = { [weak self] in
+        AppState.shared.qaService.onInterrupted = { [weak self] in
             self?.qaOverlayView?.showInterruptedState()
         }
     }
@@ -223,16 +224,26 @@ class MainViewController: UIViewController {
             ])
         }
 
-        // 在 QA 模式下，自动启动一轮问答
+        // 截取当前帧并开始问答
         if let image = AppState.shared.cameraService.captureCurrentFrame() {
-            QAService.shared.setCurrentImage(image)
-            QAService.shared.startRound()
+            AppState.shared.qaService.setCurrentImage(image)
+            AppState.shared.qaService.startRound()
         }
     }
 
     private func showMistakesMode() {
         qaOverlayView?.removeFromSuperview()
         qaOverlayView = nil
-        // TODO: 显示错题列表
+        // 显示错题列表
+        let reportVC = LearningReportViewController(sessionId: AppState.shared.currentSessionId ?? "")
+        present(reportVC, animated: true)
+    }
+
+    private func showToast(_ message: String) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        present(alert, animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            alert.dismiss(animated: true)
+        }
     }
 }

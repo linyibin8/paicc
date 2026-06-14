@@ -1,33 +1,11 @@
-/home/ydz/projects/pai-cc/backend/app/api/student_profile.py:258: FastAPIDeprecationWarning: `regex` has been deprecated, please use `pattern` instead
-  period: str = Query(default="week", regex="^(week|month|all)$")
-/home/ydz/projects/pai-cc/backend/app/api/student_profile.py:401: FastAPIDeprecationWarning: `regex` has been deprecated, please use `pattern` instead
-  period: str = Query(default="week", regex="^(week|month|all)$")
-INFO:     Started server process [730323]
+/home/ydz/projects/pai-cc/backend/app/api/student_profile.py:277: FastAPIDeprecationWarning: `regex` has been deprecated, please use `pattern` instead
+  period: str = Query(default="week", regex="^(week|month|all)$"),
+/home/ydz/projects/pai-cc/backend/app/api/student_profile.py:441: FastAPIDeprecationWarning: `regex` has been deprecated, please use `pattern` instead
+  period: str = Query(default="week", regex="^(week|month|all)$"),
+INFO:     Started server process [2279595]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8030 (Press CTRL+C to quit)
-INFO:     127.0.0.1:60546 - "GET /health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:43944 - "GET /health HTTP/1.1" 200 OK
-INFO:     100.64.0.13:48806 - "WebSocket /api/v1/qa/ws/test-session-001" [accepted]
-INFO:     connection open
-INFO:     connection closed
-WebSocket connected: test-session-001
-Client connected: ios v1.0
-WebSocket disconnected: test-session-001
-INFO:     127.0.0.1:33028 - "GET /health HTTP/1.1" 200 OK
-INFO:     100.64.0.13:59340 - "POST /api/v1/sessions/ HTTP/1.1" 200 OK
-INFO:     100.64.0.13:48834 - "GET /web/ HTTP/1.1" 200 OK
-INFO:     100.64.0.8:41998 - "GET /health HTTP/1.1" 200 OK
-INFO:     100.64.0.8:55530 - "GET /api/v1/qa/voices HTTP/1.1" 404 Not Found
-INFO:     100.64.0.8:56054 - "GET /api/v1/tts/voices HTTP/1.1" 200 OK
-INFO:     100.64.0.8:56062 - "GET /docs HTTP/1.1" 200 OK
-INFO:     100.64.0.8:40306 - "GET /health HTTP/1.1" 200 OK
-INFO:     100.64.0.8:58560 - "GET /health HTTP/1.1" 200 OK
-INFO:     100.64.0.8:54124 - "GET /health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54768 - "GET /health HTTP/1.1" 200 OK
-INFO:     100.64.0.8:33998 - "GET /health HTTP/1.1" 200 OK
-INFO:     100.64.0.8:49264 - "GET /web/ HTTP/1.1" 200 OK
-INFO:     100.64.0.8:59470 - "GET / HTTP/1.1" 200 OK
-INFO:     100.64.0.8:59486 - "GET / HTTP/1.1" 200 OK
-INFO:     100.64.0.8:53606 - "GET /api/v1/health HTTP/1.1" 404 Not Found
-INFO:     100.64.0.8:53614 - "GET /api/v1/qa/health HTTP/1.1" 200 OK
+INFO:     100.64.0.13:56860 - "GET /health HTTP/1.1" 200 OK
+INFO:     100.64.0.13:41922 - "GET /api/v1/mistakes/stats/summary HTTP/1.1" 200 OK
+INFO:     100.64.0.13:41926 - "GET /api/v1/dashboard/ HTTP/1.1" 200 OK
