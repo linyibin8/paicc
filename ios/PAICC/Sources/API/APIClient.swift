@@ -207,14 +207,46 @@ class APIClient {
 
     // MARK: - 错题管理
 
-    func getMistakes(sessionId: String) async throws -> [MistakeItem] {
-        let data = try await get("\(baseURL)/mistakes?session_id=\(sessionId)")
+    func fetchMistakes(studentId: String) async throws -> [MistakeItem] {
+        let data = try await get("\(baseURL)/mistakes?student_id=\(studentId)")
         return try JSONDecoder().decode([MistakeItem].self, from: data)
     }
 
     func updateMistake(mistakeId: String, status: String) async throws {
         let body: [String: Any] = ["status": status]
         _ = try await patch("\(baseURL)/mistakes/\(mistakeId)", body: body)
+    }
+
+    // MARK: - 复习队列
+
+    func fetchReviewQueue(studentId: String) async throws -> ReviewQueueResponse {
+        let data = try await get("\(baseURL)/review-queue/due?student_id=\(studentId)")
+        return try JSONDecoder().decode(ReviewQueueResponse.self, from: data)
+    }
+
+    func submitReview(queueId: String, quality: Int) async throws -> ReviewResponse {
+        let body: [String: Any] = ["quality": quality]
+        let data = try await post("\(baseURL)/review-queue/\(queueId)/review", body: body)
+        return try JSONDecoder().decode(ReviewResponse.self, from: data)
+    }
+
+    // MARK: - 学生画像
+
+    func fetchStudentProfile(studentId: String) async throws -> StudentProfile {
+        let data = try await get("\(baseURL)/student-profile/\(studentId)")
+        return try JSONDecoder().decode(StudentProfile.self, from: data)
+    }
+
+    func fetchStudentStats(studentId: String) async throws -> StudentStats {
+        let data = try await get("\(baseURL)/student-profile/\(studentId)/stats")
+        return try JSONDecoder().decode(StudentStats.self, from: data)
+    }
+
+    // MARK: - 学习资产
+
+    func fetchAssets(studentId: String, page: Int = 1, limit: Int = 20) async throws -> AssetsResponse {
+        let data = try await get("\(baseURL)/assets?student_id=\(studentId)&page=\(page)&limit=\(limit)")
+        return try JSONDecoder().decode(AssetsResponse.self, from: data)
     }
 
     // MARK: - TTS 语音合成

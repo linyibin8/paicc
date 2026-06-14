@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func sceneDidBecomeActive(_ scene: UIScene) {
         // 开始扫描
-        AppState.shared.startScanning()
+        NotificationCenter.default.post(name: .startScanning, object: nil)
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
@@ -33,6 +33,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func sceneDidEnterBackground(_ scene: UIScene) {
         // 停止扫描
-        AppState.shared.stopScanning()
+        NotificationCenter.default.post(name: .stopScanning, object: nil)
     }
 }

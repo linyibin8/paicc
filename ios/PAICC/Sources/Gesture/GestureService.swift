@@ -2,16 +2,9 @@ import Vision
 import AVFoundation
 import UIKit
 
-/// 手势识别服务
+/// 手势识别服务（已弃用 - 请使用 CameraService 内置的手势检测）
+/// 保留此类以避免编译错误，但实际功能已在 CameraService 中实现
 class GestureService {
-
-    // MARK: - 手势类型
-    enum GestureType {
-        case pointing      // 食指指向
-        case ok            // OK 手势
-        case peace         // ✌️ 手势
-        case raisedHand    // 举手
-    }
 
     // MARK: - 配置
     private var isRunning = false
@@ -157,10 +150,6 @@ class GestureService {
     }
 
     private func isRaisedHand(_ fingers: [VNHumanHandPoseObservation.JointName: VNRecognizedPoint]) -> Bool {
-        // 检查所有手指是否伸直
-        let extendedCount = [GestureType.pointing, .ok, .peace]
-            .filter { _ in true }  // 简化检查
-
         guard let wrist = fingers[.wrist] else { return false }
 
         var count = 0
@@ -204,10 +193,8 @@ class GestureService {
     }
 }
 
-// MARK: - GestureType Extension
+// MARK: - Notification Extension
 
-extension GestureService.GestureType: CaseIterable {
-    static var allCases: [GestureService.GestureType] {
-        return [.pointing, .ok, .peace, .raisedHand]
-    }
+extension Notification.Name {
+    static let gestureDetected = Notification.Name("GestureService.gestureDetected")
 }

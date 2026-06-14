@@ -26,7 +26,7 @@ class MainViewController: UIViewController {
     }()
 
     private lazy var modeSegment: UISegmentedControl = {
-        let segment = UISegmentedControl(items: ["扫描", "问答", "错题"])
+        let segment = UISegmentedControl(items: ["扫描", "问答", "学习"])
         segment.selectedSegmentIndex = 0
         segment.backgroundColor = UIColor.white.withAlphaComponent(0.8)
         segment.addTarget(self, action: #selector(modeChanged), for: .valueChanged)
@@ -90,6 +90,60 @@ class MainViewController: UIViewController {
 
     private func setupCamera() {
         AppState.shared.setupCamera(in: cameraPreviewView)
+
+        // 设置手势检测回调
+        AppState.shared.cameraService.onGestureDetected = { [weak self] gesture in
+            self?.handleGesture(gesture)
+        }
+
+        // 启用手势检测
+        AppState.shared.cameraService.enableGestureDetection()
+    }
+
+    // MARK: - 手势处理
+
+    private func handleGesture(_ gesture: GestureType) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+
+            switch gesture {
+            case .pointing:
+                // 指向手势：截取当前帧，开始问答
+                self.startQAWithCurrentFrame()
+            case .ok:
+                // OK 手势：打断当前问答
+                AppState.shared.qaService.interrupt()
+            case .peace:
+                // ✌️ 手势：结束本轮问答
+                AppState.shared.qaService.endRound()
+            case .raisedHand:
+                // 举手：显示提示
+                self.showToast("举手信号已接收")
+            }
+        }
+    }
+
+    private func startQAWithCurrentFrame() {
+        guard let image = AppState.shared.cameraService.captureCurrentFrame() else {
+            return
+        }
+
+        // 显示问答浮层
+        if qaOverlayView == nil {
+            qaOverlayView = QAOverlayView()
+            view.addSubview(qaOverlayView!)
+            qaOverlayView?.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                qaOverlayView!.topAnchor.constraint(equalTo: view.topAnchor),
+                qaOverlayView!.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                qaOverlayView!.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                qaOverlayView!.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            ])
+        }
+
+        // 截取当前帧并开始问答
+        AppState.shared.qaService.setCurrentImage(image)
+        AppState.shared.qaService.startRound()
     }
 
     private func setupQA() {
@@ -198,7 +252,7 @@ class MainViewController: UIViewController {
         case 1:
             showQAMode()
         case 2:
-            showMistakesMode()
+            showLearningMode()
         default:
             break
         }
@@ -231,12 +285,18 @@ class MainViewController: UIViewController {
         }
     }
 
-    private func showMistakesMode() {
+    private func showLearningMode() {
         qaOverlayView?.removeFromSuperview()
         qaOverlayView = nil
-        // 显示错题列表
-        let reportVC = LearningReportViewController(sessionId: AppState.shared.currentSessionId ?? "")
-        present(reportVC, animated: true)
+
+        let learningVC = LearningHubViewController()
+        let nav = UINavigationController(rootViewController: learningVC)
+        if #available(iOS 15.0, *) {
+            nav.modalPresentationStyle = .pageSheet
+        } else {
+            nav.modalPresentationStyle = .fullScreen
+        }
+        present(nav, animated: true)
     }
 
     private func showToast(_ message: String) {

@@ -21,7 +21,17 @@
 		E6B3CF302C9CB26B900E5202 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B0328A89260736B622462B0 /* Models.swift */; };
 		ED1A1FECCC8CC9CB149B9844 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3259426E54BC559C7821F5F3 /* LaunchScreen.storyboard */; };
 		F4E82F9150A525D6DB1F1ADB /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C044A049584BEF3AC36ABF2 /* APIClient.swift */; };
-		FAD6752B373FAA7535889694 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB9E669D80E6E74E63CA3A1 /* MainViewController.swift */; };
+		FAD6752B373FAA7535889694 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB9E669D80E6E74E63CA3A1 /* MainViewController.swift */; }		A0F3647431384F74941DCC78 /* LearningHubViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E79BD1FA860442E9E66BBD9 /* LearningHubViewController.swift */; };
+		A7678B337B08448A96697B71 /* LearningReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095EF486EBF54585BFC49B0E /* LearningReportViewController.swift */; };
+		B32710D20DC743D4BD7FA0AF /* MistakeListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E441F426F2AC42D3BBC1B683 /* MistakeListViewController.swift */; };
+		2F125E3B584E4FCEB113A98B /* ReviewQueueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A51C971DFC4B1EA0A485E8 /* ReviewQueueViewController.swift */; };
+		2EDFCF8BCCA64FF1A4231D43 /* StreamingResponseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F547CA97B9B4C9CAEBE6E92 /* StreamingResponseHandler.swift */; };
+		D3200035190A4D8ABE6F9C4F /* TTSDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D72979A495E542C0A296AB15 /* TTSDownloadManager.swift */; };
+		D61525EEACE4404E9D08121A /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E692C437B0604B97BC81D9A2 /* SessionManager.swift */; };
+		62CA270CAB7D42A791E446FE /* APIModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = E656FD36EEE642E3A13606FA /* APIModule.swift */; };
+		949E7312431F4DAC85C212FD /* SnapKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF36B5B47384AE5AE912A04 /* SnapKit.swift */; };
+		BDEBD726DE5F41F8A60DE344 /* VoiceService+Usage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F49F54576B04ABEA34823F5 /* VoiceService+Usage.swift */; };
+;
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,7 +52,17 @@
 		EAC6780B9C9A6BC9AEBDE205 /* QAOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QAOverlayView.swift; sourceTree = "<group>"; };
 		F2C119350BB5570338CEF13F /* PAICC.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PAICC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5FB7FCD55D67F046A937161 /* GestureService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureService.swift; sourceTree = "<group>"; };
-		F6C8AAC77EFF01769498AA5D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		F6C8AAC77EFF01769498AA5D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; }		2E79BD1FA860442E9E66BBD9 /* LearningHubViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningHubViewController.swift; sourceTree = "<group>"; };
+		095EF486EBF54585BFC49B0E /* LearningReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningReportViewController.swift; sourceTree = "<group>"; };
+		E441F426F2AC42D3BBC1B683 /* MistakeListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MistakeListViewController.swift; sourceTree = "<group>"; };
+		50A51C971DFC4B1EA0A485E8 /* ReviewQueueViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewQueueViewController.swift; sourceTree = "<group>"; };
+		4F547CA97B9B4C9CAEBE6E92 /* StreamingResponseHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingResponseHandler.swift; sourceTree = "<group>"; };
+		D72979A495E542C0A296AB15 /* TTSDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTSDownloadManager.swift; sourceTree = "<group>"; };
+		E692C437B0604B97BC81D9A2 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
+		E656FD36EEE642E3A13606FA /* APIModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIModule.swift; sourceTree = "<group>"; };
+		5BF36B5B47384AE5AE912A04 /* SnapKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapKit.swift; sourceTree = "<group>"; };
+		6F49F54576B04ABEA34823F5 /* VoiceService+Usage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceService+Usage.swift; sourceTree = "<group>"; };
+;
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */

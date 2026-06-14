@@ -1,7 +1,31 @@
 import Foundation
+import Combine
+import UIKit
 
 class AppState {
     static let shared = AppState()
+
+    // MARK: - Scan State
+    enum ScanState: String {
+        case idle
+        case scanning
+        case capturing
+        case analyzing
+        case qaActive
+    }
+
+    // MARK: - Published scan state
+    @Published var scanState: ScanState = .idle
+
+    // MARK: - Services
+    var cameraService: CameraService!
+    var qaService: QAService!
+
+    // MARK: - Session State
+    var currentSessionId: String? {
+        get { lastSessionId }
+        set { lastSessionId = newValue }
+    }
 
     private let defaults = UserDefaults.standard
 
@@ -119,5 +143,29 @@ class AppState {
         let domain = Bundle.main.bundleIdentifier!
         defaults.removePersistentDomain(forName: domain)
         defaults.synchronize()
+    }
+
+    // MARK: - Camera Setup
+    func setupCamera(in view: UIView) {
+        cameraService = CameraService()
+        cameraService.setupCamera(in: view)
+    }
+
+    // MARK: - QA Setup
+    func setupQA() {
+        qaService = QAService()
+    }
+
+    // MARK: - Scanning Control
+    func startScanning() {
+        scanState = .scanning
+        cameraService?.startCapture()
+        cameraService?.enableGestureDetection()
+    }
+
+    func stopScanning() {
+        scanState = .idle
+        cameraService?.disableGestureDetection()
+        cameraService?.stopCapture()
     }
 }

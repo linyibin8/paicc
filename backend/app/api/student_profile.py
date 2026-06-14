@@ -225,17 +225,9 @@ async def get_student_stats(student_id: str, db: Session = Depends(get_db)):
 
     # 获取错题数
     total_mistakes = db.query(DBMistake).filter(DBMistake.student_id == student.id).count()
+
+    # 获取已掌握错题数
     mastered_count = db.query(DBMistake).filter(
-        DBStudent.id == DBStudent.id,
-        DBStudent.student_id == student_id,
-        DBStudent.id == DBStudent.id,
-        DBMistake.student_id == student.id,
-        DBStudent.id == DBStudent.id,
-        DBMistake.status == "mastered"
-    ).count()
-    mastered_count = db.query(DBMistake).filter(
-        DBStudent.id == DBStudent.id,
-        DBStudent.student_id == student_id,
         DBMistake.student_id == student.id,
         DBMistake.status == "mastered"
     ).count()

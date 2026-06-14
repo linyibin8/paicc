@@ -155,7 +155,7 @@ class QAService: NSObject {
     @objc private func handleGestureDetected(_ notification: Notification) {
         guard isActive else { return }
 
-        if let gesture = notification.userInfo?["gesture"] as? GestureService.GestureType {
+        if let gesture = notification.userInfo?["gesture"] as? GestureType {
             switch gesture {
             case .ok:
                 interrupt()
@@ -821,4 +821,10 @@ extension QAService {
             suggestedFollowups: suggestions ?? []
         )
     }
+}
+
+// MARK: - Notification Extension
+
+extension Notification.Name {
+    static let qaStateChanged = Notification.Name("QAService.qaStateChanged")
 }
